@@ -16,13 +16,13 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { Flip } from "gsap/Flip";
 import Lenis from "lenis";
 import { luces, type Luz, type NombreLuz } from "@/lib/luz";
 import { duracion, ease, escalonado, consultaEscritorio } from "@/lib/motion";
 import { precargaLista } from "@/lib/precarga";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
+gsap.registerPlugin(ScrollTrigger, SplitText);
+// Flip se registra donde se usa (la calculadora de /inversion): no pesa en la home.
 
 let lenis: Lenis | null = null;
 /** Para frenar el scroll con el menú abierto. */

@@ -71,7 +71,7 @@ export default function CoPropiedad() {
           </div>
 
           <div ref={tabla} className="mt-8">
-            <div className="hidden grid-cols-[9rem_1fr_1fr] gap-x-6 pb-3 text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.14em] text-noche/55 md:grid">
+            <div className="hidden grid-cols-[9rem_1fr_1fr] gap-x-6 pb-3 text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.14em] text-noche/70 md:grid">
               <span />
               {coPropiedad.columnas.map((c) => (
                 <span key={c}>{c}</span>
@@ -83,13 +83,13 @@ export default function CoPropiedad() {
                   <dt className="font-semibold">{f.tema}</dt>
                   <dd
                     data-col="0"
-                    className={`transition-opacity duration-500 ${vista === 0 ? "block text-noche" : "hidden text-noche/40 line-through decoration-noche/25 md:block"}`}
+                    className={`transition-opacity duration-500 ${vista === 0 ? "block text-noche" : "hidden text-noche/65 line-through decoration-noche/40 md:block"}`}
                   >
                     {f.antes}
                   </dd>
                   <dd
                     data-col="1"
-                    className={`transition-opacity duration-500 ${vista === 1 ? "block font-semibold text-noche" : "hidden text-noche/45 md:block"}`}
+                    className={`transition-opacity duration-500 ${vista === 1 ? "block font-semibold text-noche" : "hidden text-noche/65 md:block"}`}
                   >
                     {vista === 1 && <span aria-hidden="true" className="mr-2 inline-block size-1.5 -translate-y-0.5 rounded-full bg-ambar shadow-[0_0_10px_2px_rgb(244_169_80/0.7)]" />}
                     {f.ahora}

@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import BarraMovil from "@/components/BarraMovil";
 import Motor from "@/components/Motor";
 import Precarga from "@/components/Precarga";
-import Cursor from "@/components/Cursor";
+import CursorDiferido from "@/components/CursorDiferido";
 
 // Baloo Bhaijaan 2 (manual de marca) sólo en titulares, en 600 como el B2C.
 const baloo = Baloo_Bhaijaan_2({ subsets: ["latin"], weight: ["600"], variable: "--font-baloo", display: "swap" });
@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="contenido">{children}</main>
         <Footer />
         <BarraMovil />
-        <Cursor />
+        <CursorDiferido />
         <Motor />
       </body>
     </html>
