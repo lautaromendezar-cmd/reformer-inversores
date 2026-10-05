@@ -60,8 +60,8 @@ export default function Footer() {
       <div className="contenedor mt-16">
         <div id="aviso-legal" className="scroll-mt-28 border-t border-hueso/10 pt-8">
           <h2 className="antetitulo !text-hueso/60">{avisoLegal.titulo}</h2>
-          <p className="mt-3 max-w-4xl text-[var(--text-dato)] leading-relaxed text-hueso/60">{avisoLegal.texto}</p>
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[var(--text-dato)] text-hueso/60">
+          <p className="mt-3 max-w-4xl text-[length:var(--text-dato)] leading-relaxed text-hueso/60">{avisoLegal.texto}</p>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[length:var(--text-dato)] text-hueso/60">
             <p>© {new Date().getFullYear()} Fosque Reformer. Todos los derechos reservados.</p>
             <ul className="flex gap-6">
               <li>
