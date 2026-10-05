@@ -1,0 +1,350 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens. Misma marca que el B2C (manual de Fosque Reformer), en
+   registro de deal room: suelo noche/corteza en vez de marrón, y la
+   LUZ (ámbar 2700K) como acento. El tricolor de la fachada queda sólo
+   como firma (línea del preloader).
+   Contrastes medidos: ámbar sobre noche 9,5 · noche sobre ámbar 9,5 ·
+   ambar-hondo sobre lino 4,7 · corteza sobre lino 10,8.
+------------------------------------------------------------------- */
+@theme {
+  --color-noche: #17110e;
+  --color-corteza: #2a1d17;
+  --color-corteza-clara: #42302a;
+  --color-marron: #71564b;
+  --color-arena: #c5ac94;
+  --color-hueso: #efe7dd;
+  --color-lino: #f4eee6;
+  --color-lino-hondo: #e9e0d4;
+  --color-manteca: #ffe08c;
+  --color-ambar: #f4a950;
+  --color-ambar-hondo: #9a5a14;
+  --color-luz: #ffc37a;
+  --color-frio: #1d2a2e;
+  --color-magenta: #e83e8c;
+  --color-coral: #f35d55;
+  --color-naranja: #f89b1c;
+
+  --font-titulo: var(--font-baloo), "Baloo Bhaijaan 2", system-ui, sans-serif;
+  --font-cuerpo: var(--font-figtree), "Figtree", system-ui, sans-serif;
+  --peso-titulo: 600;
+
+  /* Escala fluida. Las cifras son protagonistas: tienen su propio tamaño. */
+  --text-cifra: clamp(3.25rem, 1.6rem + 6.2vw, 7.5rem);
+  --text-display: clamp(2.75rem, 1.1rem + 7vw, 7.5rem);
+  --text-h1: clamp(2.125rem, 1rem + 4.4vw, 4.5rem);
+  --text-h2: clamp(1.75rem, 1.1rem + 2.4vw, 3rem);
+  --text-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.625rem);
+  --text-manifiesto: clamp(1.625rem, 0.9rem + 2.9vw, 3.5rem);
+  --text-cuerpo: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  --text-chico: clamp(0.875rem, 0.84rem + 0.12vw, 0.9375rem);
+  --text-dato: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------
+   El arco de luz (components/Motor.tsx): una variable de fondo y una de
+   tinta que las escenas oscuras van cambiando con el scroll.
+------------------------------------------------------------------- */
+:root {
+  --luz-fondo: #17110e;
+  --luz-tinta: #efe7dd;
+  --alto-header: 4.5rem;
+}
+
+html {
+  background: var(--luz-fondo);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--luz-fondo);
+  color: var(--luz-tinta);
+  font-family: var(--font-cuerpo);
+  font-size: var(--text-cuerpo);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* Bloques claros: pintan su propio fondo (nunca dependen del arco). */
+.claro { color: var(--color-noche); }
+.claro[data-luz="lino"] { background: var(--color-lino); }
+.claro[data-luz="arena"] { background: var(--color-lino-hondo); }
+html:not(.motor-listo) .escena[data-luz="frio"] { background: var(--color-frio); }
+html:not(.motor-listo) .escena[data-luz="corteza"] { background: var(--color-corteza); }
+html:not(.motor-listo) .escena[data-luz="k2700"] { background: #4a2c12; }
+
+h1, h2, h3, .titulo {
+  font-family: var(--font-titulo);
+  font-weight: var(--peso-titulo);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+p { text-wrap: pretty; }
+
+@layer components {
+.antetitulo {
+  font-size: var(--text-dato);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ambar);
+}
+.claro .antetitulo { color: var(--color-ambar-hondo); }
+
+.cifra-caja { container-type: inline-size; }
+.cifra-grande { font-size: min(var(--text-cifra), 20cqi); white-space: nowrap; }
+.cifra {
+  font-family: var(--font-cuerpo);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
+}
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 3rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: var(--text-chico);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+  transition: background-color 0.25s var(--ease-salida), color 0.25s var(--ease-salida), box-shadow 0.35s var(--ease-salida), border-color 0.25s;
+  will-change: transform;
+}
+.boton-luz {
+  background: var(--color-ambar);
+  color: var(--color-noche);
+  box-shadow: 0 0 0 0 rgb(255 195 122 / 0);
+}
+.boton-luz:hover { background: var(--color-luz); box-shadow: 0 0 2.5rem 0.25rem rgb(255 195 122 / 0.35); }
+.boton-linea {
+  border: 1px solid rgb(239 231 221 / 0.4);
+  color: inherit;
+}
+.boton-linea:hover { border-color: var(--color-ambar); color: var(--color-luz); }
+.claro .boton-linea { border-color: rgb(23 17 14 / 0.35); }
+.claro .boton-linea:hover { border-color: var(--color-ambar-hondo); color: var(--color-ambar-hondo); }
+
+.enlace-flecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15em;
+}
+.enlace-flecha span { transition: transform 0.3s var(--ease-salida); }
+.enlace-flecha:hover span { transform: translateX(0.3em); }
+}
+
+/* ---------- Foco y accesibilidad ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-ambar);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.claro :focus-visible { outline-color: var(--color-ambar-hondo); }
+
+.salto {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-ambar);
+  color: var(--color-noche);
+  font-weight: 600;
+  border-radius: 0.5rem;
+}
+.salto:focus { top: 1rem; }
+
+.sr-only-foco:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Reveals: sin JS todo es visible ---------- */
+html.motor-listo [data-revelar]:not(.revelado) { opacity: 0; }
+.linea { padding-bottom: 0.08em; }
+
+/* ---------- Preloader (sólo la primera visita de la sesión) ---------- */
+.precarga {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  place-items: center;
+  background: var(--color-noche);
+}
+html.precargando .precarga { display: grid; }
+html.precargando body { overflow: hidden; }
+.precarga-linea {
+  height: 2px;
+  width: min(14rem, 50vw);
+  background: linear-gradient(90deg, var(--color-magenta), var(--color-coral), var(--color-naranja), var(--color-luz));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* ---------- Cortina entre páginas ---------- */
+.cortina {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 110%, #ffc37a 0%, #f4a950 22%, #4a2c12 58%, #17110e 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* ---------- Cursor (sólo escritorio con puntero fino) ---------- */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 95;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -1.375rem 0 0 -1.375rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-luz);
+  box-shadow: 0 0 1.5rem rgb(255 195 122 / 0.35), inset 0 0 1rem rgb(255 195 122 / 0.15);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.4);
+  mix-blend-mode: normal;
+}
+
+/* ---------- Grano sutil para que los oscuros no queden planos ---------- */
+.grano::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Manifiesto (components/home/Manifiesto.tsx) ---------- */
+.manifiesto { padding-block: clamp(6rem, 14vw, 11rem); }
+.manifiesto-marca { position: absolute; left: 0; width: 100%; height: 1px; pointer-events: none; }
+.manifiesto-sol, .manifiesto-kelvin { display: none; }
+.manifiesto-estrofa + .manifiesto-estrofa { margin-top: 2.5em; }
+.manifiesto-estrofa p { max-width: 22ch; }
+
+.manifiesto.manifiesto-vivo { height: 340vh; padding-block: 0; }
+.manifiesto-vivo .manifiesto-escenario {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.manifiesto-vivo .manifiesto-estrofas { display: grid; }
+.manifiesto-vivo .manifiesto-estrofa { grid-area: 1 / 1; margin: 0; }
+.manifiesto-vivo .manifiesto-kelvin { display: block; }
+.manifiesto-vivo .manifiesto-sol {
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(70% 70% at 70% 50%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(70% 70% at 70% 50%, #000 20%, transparent 75%);
+}
+.manifiesto-vivo .manifiesto-sol video { opacity: 0.5; }
+@media (min-width: 1024px) {
+  .manifiesto-estrofa p { max-width: 26ch; }
+}
+
+/* ---------- Pilares que se encienden (Motor, [data-encender]) ---------- */
+.pilar { position: relative; transition: border-color 0.6s var(--ease-salida); }
+.pilar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-luz), rgb(255 195 122 / 0));
+  box-shadow: 0 0 14px rgb(255 195 122 / 0.6);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-salida);
+}
+.pilar-numero {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(239 231 221 / 0.35);
+  transition: color 0.6s var(--ease-salida), text-shadow 0.6s var(--ease-salida), -webkit-text-stroke-color 0.6s;
+}
+.pilar.encendido::before { transform: scaleX(1); }
+.pilar.encendido .pilar-numero {
+  color: var(--color-luz);
+  -webkit-text-stroke-color: transparent;
+  text-shadow: 0 0 40px rgb(255 195 122 / 0.45);
+}
+
+/* ---------- Planta de sala (components/Planta.tsx) ---------- */
+.reformer-halo { fill: rgb(255 195 122 / 0.18); filter: blur(3px); transition: fill 0.5s, opacity 0.5s; }
+.reformer-cuerpo { fill: var(--color-luz); transition: fill 0.5s; }
+.reformer-off .reformer-halo { fill: transparent; }
+.reformer-off .reformer-cuerpo { fill: rgb(239 231 221 / 0.18); }
+.claro .reformer-cuerpo { fill: var(--color-ambar); }
+.claro .reformer-off .reformer-cuerpo { fill: rgb(23 17 14 / 0.14); }
+
+/* ---------- Tapa del dossier ---------- */
+.tapa-escena { perspective: 1400px; width: min(22rem, 78vw); }
+.tapa {
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 0.5rem 1rem 1rem 0.5rem;
+  background:
+    radial-gradient(90% 60% at 80% 105%, rgb(255 195 122 / 0.55) 0%, rgb(244 169 80 / 0.18) 40%, transparent 70%),
+    linear-gradient(160deg, #3a2616 0%, #17110e 70%);
+  box-shadow:
+    inset 6px 0 0 rgb(0 0 0 / 0.35),
+    inset 7px 0 0 rgb(255 255 255 / 0.06),
+    0 2.5rem 4rem -1.5rem rgb(0 0 0 / 0.7),
+    0 0 6rem -1rem rgb(255 195 122 / 0.25);
+  transform: rotateY(-14deg) rotateX(4deg);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease-salida), box-shadow 0.9s var(--ease-salida);
+}
+.tapa-escena:hover .tapa { transform: rotateY(-4deg) rotateX(1deg); }
+@media (prefers-reduced-motion: reduce) { .tapa { transform: none; } }
