@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import PortadaInterna from "@/components/PortadaInterna";
-import EnPreparacion from "@/components/EnPreparacion";
-import { fotos } from "@/lib/imagenes";
+import Test from "@/components/conversion/Test";
+import { test } from "@/content/conversion";
 
-export const metadata: Metadata = { title: "¿Es para vos?", description: "Seis preguntas y te sugerimos el perfil y el formato de sala que van con vos." };
+export const metadata: Metadata = { title: "¿Es para vos?", description: test.portada.bajada };
 
-// TODO: fase 5. Por ahora, portada y cuerpo provisorio.
 export default function Candidato() {
   return (
-    <>
-      <PortadaInterna
-        antetitulo="¿Fosque Reformer es para vos?"
-        titulo="Descubrí tu perfil en dos minutos"
-        bajada="Seis preguntas y te sugerimos el perfil y el formato de sala que van con vos."
-        foto={fotos.kids}
-        alt="Dos chicos juegan en la sala de Fosque Niños con una instructora"
-      />
-      <EnPreparacion texto="El test completo llega en la próxima entrega." />
-    </>
+    <section className="escena relative min-h-[100svh] pb-28 pt-36" data-luz="corteza" aria-labelledby="test-titulo">
+      <div className="contenedor">
+        <div className="mx-auto max-w-3xl">
+          <p className="antetitulo">{test.portada.antetitulo}</p>
+          <h1 id="test-titulo" className="mt-4 text-[length:var(--text-h2)]">
+            {test.portada.titulo}
+          </h1>
+          <p className="mt-3 max-w-xl text-hueso/75">{test.portada.bajada}</p>
+        </div>
+        <div className="mt-12">
+          <Test />
+        </div>
+      </div>
+    </section>
   );
 }

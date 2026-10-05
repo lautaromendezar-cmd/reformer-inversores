@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PortadaInterna from "@/components/PortadaInterna";
-import EnPreparacion from "@/components/EnPreparacion";
 import { fotos } from "@/lib/imagenes";
 
-export const metadata: Metadata = { title: "Portal Socios", description: "El espacio privado de la red: manuales, métricas de tu sucursal y la comunidad de socios." };
+export const metadata: Metadata = { title: "Portal Socios", description: "Portal Socios de Fosque Reformer: próximamente." };
 
-// TODO: fase —. Por ahora, portada y cuerpo provisorio.
+// El Portal Socios no existe todavía (el brief lo pide como "Próximamente").
 export default function Portal() {
   return (
-    <>
-      <PortadaInterna
-        antetitulo="Portal Socios"
-        titulo="Próximamente"
-        bajada="El espacio privado de la red: manuales, métricas de tu sucursal y la comunidad de socios."
-        foto={fotos.recepcion}
-        alt="Recepción Fosque con barra de café y alumnas entrando por los molinetes"
-      />
-      <EnPreparacion texto="El Portal Socios está en desarrollo. Si ya sos socio, tu coordinador te va a avisar cuando se habilite." />
-    </>
+    <PortadaInterna antetitulo="Portal Socios" titulo="Próximamente" foto={fotos.recepcion} alt="Recepción Fosque con barra de café y alumnas entrando por los molinetes">
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/" className="boton boton-luz">
+          Volver al inicio
+        </Link>
+        <Link href="/aplicar" className="boton boton-linea text-hueso">
+          Aplicar
+        </Link>
+      </div>
+    </PortadaInterna>
   );
 }

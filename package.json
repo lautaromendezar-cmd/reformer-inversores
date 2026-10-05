@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "imagenes": "node scripts/preparar-imagenes.mjs"
+    "imagenes": "node scripts/preparar-imagenes.mjs",
+    "mapa": "node scripts/generar-mapa.mjs",
+    "og": "node scripts/generar-og.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -27,6 +29,8 @@
     "eslint-config-next": "^16.3.6",
     "sharp": "^0.34.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5"
+    "topojson-client": "^3.1.0",
+    "typescript": "^5",
+    "world-atlas": "^2.0.2"
   }
 }

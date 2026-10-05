@@ -42,13 +42,15 @@ lib/              motion (tiempos y curvas), luz (arco de color), lead (Zod), im
 assets/img/       fotos que importa next/image (salida de npm run imagenes)
 assets/gen/       cola y script de las imágenes con IA (los crudos no van al repo)
 public/video/     el clip del sol (reutilizado del B2C)
-scripts/          preparar-imagenes.mjs, generar-og.mjs
+scripts/          preparar-imagenes.mjs, generar-og.mjs, generar-mapa.mjs (npm run imagenes / og / mapa)
 docs/             el Documento Maestro B2B (PDF, fuera del repo)
 ```
 
 ## Dónde se edita el contenido
 
-- **Copy de la home:** `content/home.ts`.
+- **Regla:** sólo textos del Documento Maestro. Lo que no está en el PDF no se inventa.
+- **Copy por página:** `content/home.ts`, `modelo.ts`, `copropiedad.ts`, `inversion.ts`,
+  `proceso.ts`, `academia.ts`, `faq.ts`, `conversion.ts` (test y aplicación).
 - **Números (canon, royalty, formatos, CAPEX):** `content/economia.ts`. La home y la calculadora
   leen de ahí: no hay números escritos en los componentes.
 - **Afirmaciones a validar** (24+ años, 1.000 embajadores, unicornio, break-even, ROI):

@@ -9,6 +9,12 @@ variables y estructura; `ASSETS_TODO.md` para imágenes.
 (4-oct-2026): los datos del documento van tal cual; las afirmaciones son responsabilidad del
 cliente.** Igual quedan juntas en `content/afirmaciones.ts` para poder cambiarlas en un lugar.
 
+**Regla de copy (Lautaro, 5-oct-2026): "usá los textos del PDF, no inventes".** Todo texto que
+afirma algo sale del documento (voseo y erratas corregidas). Lo que no es del PDF es sólo
+interfaz: botones, etiquetas, instrucciones de formulario. Si el PDF no dice algo (plazos,
+definiciones de los perfiles, el paso a paso del proceso), no se completa: se deja el título
+solo o se omite, con `// TODO: validar con Gerardo`.
+
 ## Dirección de arte: "Portales de luz"
 
 - Suelo noche/corteza (más sobrio que el marrón del B2C). La luz es el acento: ámbar 2700K
@@ -30,14 +36,24 @@ cliente.** Igual quedan juntas en `content/afirmaciones.ts` para poder cambiarla
   de los `fixed` y recortaba el panel a 72 px.
 - **`template.tsx`** hace la cortina entre páginas y limpia el `transform` al terminar (un
   transform residual rompe cualquier `fixed`/`sticky` de adentro).
-- **Las páginas internas son provisorias** (portada + `EnPreparacion`) hasta la fase 4/5.
+- **Mapa de la hoja de ruta:** `npm run mapa` (scripts/generar-mapa.mjs) rasteriza Natural Earth
+  (world-atlas, dev) a `lib/mapa.generado.ts`. `MapaRuta` agrupa los 1.334 puntos en ~30 `<path>`
+  por país y banda de distancia a Buenos Aires: con un `<circle>` por punto el TBT de /modelo
+  subía a 240 ms.
+- **Calculadora:** los `<span data-num>` muestran siempre el valor inicial y GSAP escribe encima
+  (si React también los actualiza, se pisan el nodo de texto). El indicador de formato lo crea
+  y lo mueve GSAP con Flip, fuera de React.
+- **Proceso:** el modo horizontal (`.proceso-horizontal`) lo pone el JS sólo cuando fija la
+  sección; con clases `lg:` una tablet táctil quedaba con los pasos en fila y sin pin.
+- **El foco global va en `@layer base`** para que `focus:outline-none` pueda pisarlo.
 - El formulario sin `RESEND_API_KEY` responde 503 y ofrece WhatsApp con los datos ya escritos.
 
 ## Fases (del brief)
 
-1. Relevamiento ✔ · 2. Base ✔ · 3. Home ✔ (esperando feedback) · 4. Internas (Modelo,
-Co-Propiedad, Inversión con calculadora + Flip, Proceso con scroll horizontal, Academia, FAQ) ·
-5. Conversión (quiz `/candidato`, formulario multi-step `/aplicar`, gracias) · 6. Pulido.
+1. Relevamiento ✔ · 2. Base ✔ · 3. Home ✔ · 4. Internas ✔ (Modelo con mapa, Co-Propiedad con
+simulador, Inversión con calculadora + Flip y cadena de importación, Proceso horizontal, Academia
+con volúmenes, FAQ) · 5. Conversión ✔ (test `/candidato` → `/aplicar` precargado, multi-step,
+gracias) · 6. Pulido (pendiente: dossier PDF, datos del cliente, Lighthouse en vivo).
 
 ## Deploy
 
