@@ -31,14 +31,21 @@ export default function Manifiesto() {
     const splits: SplitText[] = [];
 
     const ctx = gsap.context(() => {
-      const estrofas = gsap.utils.toArray<HTMLElement>("[data-estrofa]");
+      // Las palabras se apagan recién cuando el manifiesto se acerca: así nadie ve (ni mide)
+      // texto atenuado fuera de contexto, y el timeline se arma una sola vez.
+      ScrollTrigger.create({ trigger: sec, start: "top bottom", once: true, onEnter: () => ctx.add(armar) });
+    }, sec);
+
+    function armar() {
+      const estrofas = gsap.utils.toArray<HTMLElement>("[data-estrofa]", sec);
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: sec, start: "top top", end: "bottom bottom", scrub: 0.6 },
       });
       const k = { v: KELVIN[0] };
       estrofas.forEach((estrofa, i) => {
-        const split = SplitText.create(estrofa.querySelectorAll("p"), { type: "words" });
+        // aria "none": sin aria-label en el <p> (prohibido en un párrafo); el lector lee las palabras como texto normal
+        const split = SplitText.create(estrofa.querySelectorAll("p"), { type: "words", aria: "none" });
         splits.push(split);
         gsap.set(split.words, { opacity: 0.14 });
         if (i > 0) gsap.set(estrofa, { opacity: 0, y: 60 });
@@ -50,7 +57,7 @@ export default function Manifiesto() {
       // La temperatura de color baja de 6500K a 2700K en todo el recorrido
       tl.to(k, { v: KELVIN[1], duration: tl.duration(), onUpdate: () => kelvin.current && (kelvin.current.textContent = `${Math.round(k.v / 100) * 100}K`) }, 0);
       // El sol aparece con la última estrofa
-      tl.fromTo("[data-sol]", { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 6 }, 18.5);
+      tl.fromTo(sec.querySelector("[data-sol]"), { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 6 }, 18.5);
       tl.to({}, { duration: 2 }); // aire al final antes de soltar
 
       // El clip sólo baja y corre cuando el manifiesto está en pantalla
@@ -70,7 +77,8 @@ export default function Manifiesto() {
           } else v.pause();
         },
       });
-    }, sec);
+      ScrollTrigger.refresh();
+    }
 
     return () => {
       splits.forEach((s) => s.revert());

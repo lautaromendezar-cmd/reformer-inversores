@@ -24,14 +24,15 @@ export default function Hero() {
     let split: SplitText | null = null;
     const ctx = gsap.context(() => {
       const resto = raiz.current!.querySelectorAll("[data-hero-entra]");
-      gsap.set(resto, { opacity: 0, y: 24 });
+      // Sólo desplazamiento, sin opacidad: la bajada es el LCP y no puede esperar al preloader
+      gsap.set(resto, { y: 24 });
       gsap.set(titulo.current, { opacity: 0 });
       precargaLista.then(() => {
         split = SplitText.create(titulo.current!, { type: "words,lines", mask: "lines", linesClass: "linea" });
         gsap.set(titulo.current, { opacity: 1 });
         const tl = gsap.timeline();
         tl.from(split.words, { yPercent: 115, duration: duracion.larga, ease: ease.salida, stagger: escalonado.palabras * 2 })
-          .to(resto, { opacity: 1, y: 0, duration: duracion.media, ease: ease.salida, stagger: escalonado.items }, 0.45);
+          .to(resto, { y: 0, duration: duracion.media, ease: ease.salida, stagger: escalonado.items }, 0.45);
       });
       // La foto: zoom leve que se retira al scrollear
       gsap.fromTo(

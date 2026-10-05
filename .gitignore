@@ -20,3 +20,5 @@ assets/gen/out/
 .DS_Store
 Thumbs.db
 assets/gen/hoja.jpg
+
+.vercel

@@ -65,10 +65,10 @@ export default function Header() {
       }`}
     >
       <div className="contenedor flex h-[var(--alto-header)] items-center gap-6 text-hueso">
-        <Link href="/" className="flex shrink-0 items-center gap-3" aria-label="Fosque Reformer Partners, inicio">
+        <Link href="/" className="flex shrink-0 items-center gap-3">
           <Isotipo className="h-7 w-auto" />
           <span className="flex flex-col leading-none">
-            <span className="titulo text-[1.05rem] tracking-tight">Fosque Reformer</span>
+            <span className="titulo text-[1.05rem] tracking-tight">Fosque Reformer</span>{" "}
             <span className="mt-1 text-[0.625rem] font-semibold uppercase tracking-[0.32em] text-ambar">Partners</span>
           </span>
         </Link>
