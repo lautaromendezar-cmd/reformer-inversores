@@ -26,9 +26,6 @@ export default function Cifras() {
           <h2 id="cifras-titulo" className="col-span-12 text-[length:var(--text-h1)] md:col-span-7" data-revelar="lineas">
             {cifras.titulo}
           </h2>
-          <p className="col-span-12 max-w-md self-end text-noche/75 md:col-span-4 md:col-start-9" data-revelar>
-            {cifras.bajada}
-          </p>
         </div>
 
         <ul className="mt-[clamp(3rem,7vw,6rem)] grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-contar>

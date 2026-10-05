@@ -4,7 +4,7 @@ export const marca = {
   nombre: "Fosque Reformer Partners",
   corto: "Fosque Reformer",
   descripcion:
-    "Franquicia y co-propiedad de Pilates Moderno. Salas boutique de 10 a 25 Reformers de Autor, inversión al costo operativo y un sistema que te acompaña desde la aplicación hasta la apertura.",
+    "Plataforma de emprendedores, inversores y operadores en comunidad. Inversión inteligente al costo operativo real, diseño industrial de autor y co-propiedad compartida.",
   // URL pública: NEXT_PUBLIC_SITE_URL en Vercel. El PDF habla de fosquereformer.com/inversores.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://fosque-reformer-partners.vercel.app",
   sitioB2C: "https://fosque-reformer.vercel.app", // TODO: validar con Gerardo — pasar al dominio final
