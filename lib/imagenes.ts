@@ -5,7 +5,7 @@
 // Las de gente son renders del estudio (Artagaveytia-Mantel) con personas sumadas con IA
 // (Nano Banana Pro, 4-oct-2026). Nadie de las fotos existe: no hace falta consentimiento.
 
-import heroClase from "@/assets/img/hero-clase.jpg";
+import heroNegocios from "@/assets/img/hero-negocios.jpg";
 import salaInstructora from "@/assets/img/sala-instructora.jpg";
 import recepcion from "@/assets/img/recepcion.jpg";
 import lounge from "@/assets/img/lounge.jpg";
@@ -19,7 +19,7 @@ import corredorArcos from "@/assets/img/corredor-arcos.jpg";
 import reformerTresCuartos from "@/assets/img/reformer-tres-cuartos.jpg";
 
 export const fotos = {
-  heroClase,
+  heroNegocios,
   salaInstructora,
   recepcion,
   lounge,

@@ -8,7 +8,7 @@ alumnos, profes y staff con IA (Nano Banana Pro, 4-oct-2026, ~16 créditos). Ped
 
 | Archivo (`assets/img/`) | Render de base | Dónde se usa |
 |---|---|---|
-| `hero-clase.jpg` | salon-sol-reformers-negros | Hero de la home, OG |
+| `hero-negocios.jpg` | salon-reformer-sol-frontal + isotipo | Hero de la home, OG (14-oct: el fundador con dos socios en la sala; la anterior, `hero-clase`, pasó al B2C) |
 | `sala-instructora.jpg` | salon-reformer-sol-frontal | Cierre de la home, portada de /inversion |
 | `recepcion.jpg` | recepcion-cafe-molinetes | Por qué Fosque, portada de /portal |
 | `equipo.jpg` (3:4) | salon-palmeras-en-uso | Co-propiedad (home y /co-propiedad) |
@@ -20,7 +20,7 @@ alumnos, profes y staff con IA (Nano Banana Pro, 4-oct-2026, ~16 créditos). Ped
 Renders sin gente: `fachada-noche`, `salon-domo`, `corredor-arcos`, `reformer-tres-cuartos`.
 Video: `sol-loop` del B2C (ya existía; no se generó video nuevo). Pesa 1,5 MB (mobile 1 MB).
 
-Para regenerar o sumar: `assets/gen/cola.txt` (una línea por imagen: `nombre|render|proporción|escena`)
+Para regenerar o sumar: `assets/gen/cola.txt` (y `cola-negocios.txt`, las tres opciones del hero de 14-oct) (una línea por imagen: `nombre|render|proporción|escena`)
 y `bash assets/gen/lanzar.sh` (salta lo que ya bajó). Después, `npm run imagenes`.
 
 ⚠️ **Los renders son de un estudio que no está construido.** Mismo pendiente que el B2C: la

@@ -1,4 +1,4 @@
-// Imagen de Open Graph (1200×630): la clase del hero con el lockup y la bajada encima.
+// Imagen de Open Graph (1200×630): la foto del hero con el lockup y la bajada encima.
 // Sale a app/opengraph-image.jpg, que Next publica solo. Uso: node scripts/generar-og.mjs
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
@@ -14,7 +14,7 @@ const capa = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <text x="72" y="456" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" fill="#efe7dd">de la Nueva Era.</text>
   <text x="72" y="530" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#efe7dd" fill-opacity=".8">Franquicia y co-propiedad de Pilates Moderno</text>
 </svg>`;
-await sharp("assets/img/hero-clase.jpg")
+await sharp("assets/img/hero-negocios.jpg")
   .resize(1200, 630, { fit: "cover", position: "centre" })
   .composite([{ input: Buffer.from(capa) }, { input: Buffer.from(lockup), left: 66, top: 80 }])
   .jpeg({ quality: 84, mozjpeg: true })

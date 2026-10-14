@@ -5,7 +5,7 @@ import sharp from "sharp";
 import { mkdirSync, existsSync } from "node:fs";
 
 const lista = [
-  ["assets/gen/out/hero-clase.png", "hero-clase"],
+  ["assets/gen/out/hero-negocios-a.png", "hero-negocios"],
   ["assets/gen/out/sala-instructora.png", "sala-instructora"],
   ["assets/gen/out/recepcion.png", "recepcion"],
   ["assets/gen/out/lounge.png", "lounge"],

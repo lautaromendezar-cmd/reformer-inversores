@@ -51,13 +51,13 @@ export default function Hero() {
     <section ref={raiz} className="escena relative isolate flex min-h-[100svh] items-end overflow-hidden" data-luz="noche" aria-labelledby="hero-titulo">
       <div className="absolute inset-0 -z-10" data-hero-foto>
         <Image
-          src={fotos.heroClase}
+          src={fotos.heroNegocios}
           alt={hero.alt}
           fill
           priority
           placeholder="blur"
           sizes="100vw"
-          className="object-cover object-[50%_40%]"
+          className="object-cover object-[62%_40%] md:object-[50%_40%]"
         />
       </div>
       {/* Velos: abajo para el texto, y un halo cálido que sube desde el sol de la sala */}

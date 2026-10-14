@@ -10,7 +10,7 @@ export const hero = {
     "Te damos la bienvenida al primer ecosistema asociativo que unifica la precisión del Pilates Moderno con una plataforma comercial global. Inversión inteligente al costo operativo real, diseño industrial de autor y co-propiedad compartida.",
   ctaDossier: "Descargar Dossier Maestro",
   ctaReunion: "Agendar reunión estratégica",
-  alt: "Clase de Pilates Reformer en una sala Fosque con luz cálida: alumnas sonriendo sobre los Reformers y la instructora caminando por el pasillo central",
+  alt: "Sala Fosque con clase de Pilates Reformer: en el pasillo central, el fundador conversa con dos socios mientras los alumnos sonríen sobre los Reformers",
 };
 
 export type Cifra = {
