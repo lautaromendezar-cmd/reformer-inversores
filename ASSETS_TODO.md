@@ -18,7 +18,9 @@ alumnos, profes y staff con IA (Nano Banana Pro, 4-oct-2026, ~16 créditos). Ped
 | `socia-operadora.jpg` (3:4) | recepcion-cafe-vegetacion | Portada de /aplicar |
 
 Renders sin gente: `fachada-noche`, `salon-domo`, `corredor-arcos`, `reformer-tres-cuartos`.
-Video: `sol-loop` del B2C (ya existía; no se generó video nuevo). Pesa 1,5 MB (mobile 1 MB).
+Manifiesto (14-oct): `manifiesto-ruido` (sin render, Buenos Aires con lluvia), `manifiesto-encuentro`
+(salon-palmeras-en-uso), `manifiesto-portal` (fachada-calle-noche); prompts en `assets/gen/cola-manifiesto.txt`.
+Ya no hay video en este sitio.
 
 Para regenerar o sumar: `assets/gen/cola.txt` (y `cola-negocios.txt`, las tres opciones del hero de 14-oct) (una línea por imagen: `nombre|render|proporción|escena`)
 y `bash assets/gen/lanzar.sh` (salta lo que ya bajó). Después, `npm run imagenes`.

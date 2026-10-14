@@ -22,7 +22,8 @@ solo o se omite, con `// TODO: validar con Gerardo`.
 - Baloo Bhaijaan 2 600 en titulares (igual que el B2C), Figtree en cuerpo y **cifras con
   `tabular-nums`** (los counters no tiemblan).
 - El arco de color (`lib/luz.ts` + `Motor.tsx`, mismo mecanismo que el B2C). La temperatura es el
-  hilo: el manifiesto va de frío (6500K) a 2700K y termina en el sol (`sol-loop` del B2C).
+  hilo: el manifiesto va de frío (6500K) a 2700K, con una foto por estrofa graduada igual (ciudad
+  con ruido, encuentro en la sala, fachada como portal). El sol del B2C se sacó el 14-oct: repetía la sala.
 - **Gente feliz en los ambientes** (pedido del cliente): renders del estudio + personas con IA.
 
 ## Cosas que no son obvias

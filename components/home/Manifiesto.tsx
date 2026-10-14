@@ -1,27 +1,37 @@
 "use client";
 
 // Manifiesto "Nuevo Ciclo": tres estrofas que se encienden palabra por palabra mientras la luz
-// pasa de fría a 2700K. Al final aparece el sol de la sala (clip sol-loop del B2C).
+// pasa de fría a 2700K. Cada estrofa tiene su foto de fondo, graduada con la luz del contador:
+// la ciudad con ruido (fría), el encuentro en la sala (neutra) y la fachada como portal (2700K).
 //
 // Cómo funciona: la sección mide 340vh y adentro hay un escenario `sticky` de 100vh (no se usa
 // pin de GSAP: así los marcadores del arco de luz quedan en el flujo y el Motor cambia el fondo
 // solo). Un timeline con scrub recorre las estrofas. Sin JS o con reduced-motion no se agrega
 // `.manifiesto-vivo` y las estrofas se leen una debajo de la otra, ya en luz cálida.
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { manifiesto } from "@/content/home";
+import { fotos } from "@/lib/imagenes";
 import { movimientoReducido } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const KELVIN = [6500, 2700];
 
+// Una foto por estrofa. Decorativas (alt vacío): el texto del manifiesto ya dice todo.
+// `pos` es el encuadre en mobile, donde sólo entra una franja: la persona o la fachada.
+const FONDOS = [
+  { src: fotos.manifiestoRuido, pos: "object-[80%_50%]" },
+  { src: fotos.manifiestoEncuentro, pos: "object-[76%_50%]" },
+  { src: fotos.manifiestoPortal, pos: "object-[95%_50%]" },
+];
+
 export default function Manifiesto() {
   const raiz = useRef<HTMLElement>(null);
-  const video = useRef<HTMLVideoElement>(null);
   const kelvin = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -38,6 +48,7 @@ export default function Manifiesto() {
 
     function armar() {
       const estrofas = gsap.utils.toArray<HTMLElement>("[data-estrofa]", sec);
+      const fondos = gsap.utils.toArray<HTMLElement>("[data-fondo]", sec);
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: sec, start: "top top", end: "bottom bottom", scrub: 0.6 },
@@ -50,33 +61,17 @@ export default function Manifiesto() {
         gsap.set(split.words, { opacity: 0.14 });
         if (i > 0) gsap.set(estrofa, { opacity: 0, y: 60 });
         const t = i * 10;
+        // La foto entra un poco antes que su estrofa y se acerca apenas mientras se lee
+        if (i > 0) tl.fromTo(fondos[i], { opacity: 0 }, { opacity: 1, duration: 2 }, t - 1.6);
+        tl.fromTo(fondos[i], { scale: 1.08 }, { scale: 1, duration: 11.6 }, Math.max(0, t - 1.6));
         if (i > 0) tl.to(estrofa, { opacity: 1, y: 0, duration: 1.2 }, t - 0.6);
         tl.to(split.words, { opacity: 1, duration: 0.6, stagger: 6.5 / split.words.length }, t);
         if (i < estrofas.length - 1) tl.to(estrofa, { opacity: 0, y: -60, duration: 1.2 }, t + 8);
       });
       // La temperatura de color baja de 6500K a 2700K en todo el recorrido
       tl.to(k, { v: KELVIN[1], duration: tl.duration(), onUpdate: () => kelvin.current && (kelvin.current.textContent = `${Math.round(k.v / 100) * 100}K`) }, 0);
-      // El sol aparece con la última estrofa
-      tl.fromTo(sec.querySelector("[data-sol]"), { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 6 }, 18.5);
       tl.to({}, { duration: 2 }); // aire al final antes de soltar
 
-      // El clip sólo baja y corre cuando el manifiesto está en pantalla
-      const v = video.current!;
-      ScrollTrigger.create({
-        trigger: sec,
-        start: "top bottom",
-        end: "bottom top",
-        onToggle: (s) => {
-          if (s.isActive) {
-            if (!v.src) {
-              const mobile = window.matchMedia("(max-width: 767px)").matches;
-              v.poster = mobile ? "/video/sol-loop-mobile-poster.webp" : "/video/sol-loop-poster.webp";
-              v.src = mobile ? "/video/sol-loop-mobile.mp4" : "/video/sol-loop.mp4";
-            }
-            v.play().catch(() => {});
-          } else v.pause();
-        },
-      });
       ScrollTrigger.refresh();
     }
 
@@ -94,8 +89,14 @@ export default function Manifiesto() {
       <div aria-hidden="true" className="manifiesto-marca escena" data-luz="k2700" style={{ top: "58%" }} />
 
       <div className="manifiesto-escenario">
-        <div data-sol aria-hidden="true" className="manifiesto-sol">
-          <video ref={video} muted loop playsInline preload="none" className="h-full w-full object-cover" />
+        <div aria-hidden="true" className="manifiesto-fondos">
+          {FONDOS.map((f, i) => (
+            <div key={i} data-fondo className="manifiesto-fondo">
+              <Image src={f.src} alt="" fill sizes="100vw" placeholder="blur" className={`object-cover ${f.pos} md:object-center`} />
+            </div>
+          ))}
+          {/* Velo: el texto vive a la izquierda; en mobile ocupa todo el ancho y el velo es parejo */}
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgb(23_17_14/0.88)_0%,rgb(23_17_14/0.62)_45%,rgb(23_17_14/0.12)_80%)] max-md:bg-none max-md:bg-noche/65" />
         </div>
 
         <div className="contenedor relative">

@@ -6,6 +6,9 @@
 // (Nano Banana Pro, 4-oct-2026). Nadie de las fotos existe: no hace falta consentimiento.
 
 import heroNegocios from "@/assets/img/hero-negocios.jpg";
+import manifiestoRuido from "@/assets/img/manifiesto-ruido.jpg";
+import manifiestoEncuentro from "@/assets/img/manifiesto-encuentro.jpg";
+import manifiestoPortal from "@/assets/img/manifiesto-portal.jpg";
 import salaInstructora from "@/assets/img/sala-instructora.jpg";
 import recepcion from "@/assets/img/recepcion.jpg";
 import lounge from "@/assets/img/lounge.jpg";
@@ -20,6 +23,9 @@ import reformerTresCuartos from "@/assets/img/reformer-tres-cuartos.jpg";
 
 export const fotos = {
   heroNegocios,
+  manifiestoRuido,
+  manifiestoEncuentro,
+  manifiestoPortal,
   salaInstructora,
   recepcion,
   lounge,

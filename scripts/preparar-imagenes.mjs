@@ -6,6 +6,10 @@ import { mkdirSync, existsSync } from "node:fs";
 
 const lista = [
   ["assets/gen/out/hero-negocios-a.png", "hero-negocios"],
+  ["assets/gen/out/manifiesto-ruido.png", "manifiesto-ruido"],
+  ["assets/gen/out/manifiesto-encuentro.png", "manifiesto-encuentro"],
+  // Recorte: la fachada corrida a la derecha para que el cartel no choque con "Bienvenidos a Fosque"
+  ["assets/gen/out/manifiesto-portal.png", "manifiesto-portal", { left: 0, top: 380, width: 1954, height: 1099 }],
   ["assets/gen/out/sala-instructora.png", "sala-instructora"],
   ["assets/gen/out/recepcion.png", "recepcion"],
   ["assets/gen/out/lounge.png", "lounge"],
@@ -20,9 +24,11 @@ const lista = [
 ];
 
 mkdirSync("assets/img", { recursive: true });
-for (const [origen, nombre] of lista) {
+for (const [origen, nombre, recorte] of lista) {
   if (!existsSync(origen)) { console.log("falta", origen); continue; }
-  const info = await sharp(origen)
+  let img = sharp(origen);
+  if (recorte) img = img.extract(recorte);
+  const info = await img
     .resize({ width: 2400, withoutEnlargement: true })
     .jpeg({ quality: 82, mozjpeg: true })
     .toFile(`assets/img/${nombre}.jpg`);
