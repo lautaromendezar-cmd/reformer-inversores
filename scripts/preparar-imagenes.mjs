@@ -10,11 +10,12 @@ const lista = [
   ["assets/gen/out/manifiesto-encuentro.png", "manifiesto-encuentro"],
   // Recorte: la fachada corrida a la derecha para que el cartel no choque con "Bienvenidos a Fosque"
   ["assets/gen/out/manifiesto-portal.png", "manifiesto-portal", { left: 0, top: 380, width: 1954, height: 1099 }],
-  ["assets/gen/out/sala-instructora.png", "sala-instructora"],
-  ["assets/gen/out/recepcion.png", "recepcion"],
+  // Recorte: afuera la máquina expendedora de la derecha (traía marcas)
+  ["assets/gen/out/negocio-recepcion.png", "negocio-recepcion", { left: 0, top: 0, width: 2394, height: 1536 }],
+  ["assets/gen/out/negocio-socios.png", "negocio-socios"],
+  ["assets/gen/out/negocio-portal-2.png", "negocio-portal"],
   ["assets/gen/out/lounge.png", "lounge"],
   ["assets/gen/out/kids.png", "kids"],
-  ["assets/gen/out/equipo.png", "equipo"],
   ["assets/gen/out/detalle-manos.png", "detalle-manos"],
   ["assets/gen/out/socia-operadora.png", "socia-operadora"],
   ["assets/renders/fachada-calle-noche.jpg", "fachada-noche"],

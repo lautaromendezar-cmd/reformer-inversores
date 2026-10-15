@@ -25,7 +25,7 @@ export default function Inversion() {
 
   return (
     <>
-      <PortadaInterna antetitulo={portada.antetitulo} titulo={portada.titulo} bajada={portada.bajada} foto={fotos.salaInstructora} alt={portada.alt} posicion="40% 50%" />
+      <PortadaInterna antetitulo={portada.antetitulo} titulo={portada.titulo} bajada={portada.bajada} foto={fotos.manifiestoEncuentro} alt={portada.alt} posicion="70% 50%" />
 
       {/* Esquema económico */}
       <section className="escena claro py-[clamp(5rem,12vw,10rem)]" data-luz="lino" aria-labelledby="esquema">

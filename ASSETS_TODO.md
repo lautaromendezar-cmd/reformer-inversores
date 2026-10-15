@@ -9,9 +9,9 @@ alumnos, profes y staff con IA (Nano Banana Pro, 4-oct-2026, ~16 créditos). Ped
 | Archivo (`assets/img/`) | Render de base | Dónde se usa |
 |---|---|---|
 | `hero-negocios.jpg` | salon-reformer-sol-frontal + isotipo | Hero de la home, OG (14-oct: el fundador con dos socios en la sala; la anterior, `hero-clase`, pasó al B2C) |
-| `sala-instructora.jpg` | salon-reformer-sol-frontal | Cierre de la home, portada de /inversion |
-| `recepcion.jpg` | recepcion-cafe-molinetes | Por qué Fosque, portada de /portal |
-| `equipo.jpg` (3:4) | salon-palmeras-en-uso | Co-propiedad (home y /co-propiedad) |
+| `negocio-portal.jpg` (3:4) | corredor-arcos-luz | CTA final de la home (14-oct: el fundador da la mano a una socia bajo los arcos) |
+| `negocio-recepcion.jpg` | recepcion-cafe-molinetes (recortada: sin la expendedora) | Por qué Fosque, portada de /portal (14-oct: la socia operadora y un inversor en la barra) |
+| `negocio-socios.jpg` (3:4) | salon-palmeras-en-uso + foto real del Reformer | Co-propiedad (home y /co-propiedad). La anterior tenía un Reformer deforme |
 | `lounge.jpg` | lounge-lockers-sillones | Portada de /faq |
 | `kids.jpg` | sala-kids-arbol-reformer | Portada de /candidato; Flagship (Fosque Niños) |
 | `detalle-manos.jpg` | reformer-sala-detalle | Portada de /academia |
@@ -22,7 +22,7 @@ Manifiesto (14-oct): `manifiesto-ruido` (fachada-calle-noche-apagada del B2C, fu
 (salon-palmeras-en-uso), `manifiesto-portal` (fachada-calle-noche); prompts en `assets/gen/cola-manifiesto.txt`.
 Ya no hay video en este sitio.
 
-Para regenerar o sumar: `assets/gen/cola.txt` (y `cola-negocios.txt`, las tres opciones del hero de 14-oct) (una línea por imagen: `nombre|render|proporción|escena`)
+Para regenerar o sumar: `assets/gen/cola.txt` (y `cola-negocios.txt` / `cola-negocios-2.txt` del 14-oct; recepcion, equipo, sala-instructora y hero-clase pasaron al B2C) (una línea por imagen: `nombre|render|proporción|escena`)
 y `bash assets/gen/lanzar.sh` (salta lo que ya bajó). Después, `npm run imagenes`.
 
 ⚠️ **Los renders son de un estudio que no está construido.** Mismo pendiente que el B2C: la

@@ -96,7 +96,7 @@ export const porQue = {
         "Programa de vesting: hasta un 50% de la participación accionaria de la sucursal asignada entre la coordinadora y las instructoras clave, erradicando la rotación de personal y asegurando un compromiso absoluto.",
     },
   ],
-  alt: "Recepción Fosque con barra de café en madera: una recepcionista sirve un café mientras dos alumnas entran por los molinetes",
+  alt: "Recepción Fosque: la socia operadora y un inversor revisan los números en una tablet mientras la barista les sirve café y entran alumnas por los molinetes",
 };
 
 // Sección "Co-Propiedad Dinámica" de la web (§4): franquicia del pasado vs. ecosistema Fosque.
@@ -124,7 +124,7 @@ export const coPropiedad = {
     },
   ],
   cta: "Ver el sistema de co-propiedad",
-  alt: "El equipo de una sucursal Fosque: la coordinadora y cuatro instructores abrazados en la sala, sonriendo a cámara",
+  alt: "Los socios de una sucursal Fosque en la sala: la coordinadora le da la mano al inversor mientras las instructoras sonríen",
 };
 
 export const formatosTeaser = {
@@ -166,5 +166,5 @@ export const cierre = {
   antetitulo: "Aplicación",
   titulo: "No abrimos locales: creamos portales a una vida más abundante.",
   bajada: "Dejanos tus datos y te contactamos para agendar la reunión estratégica.",
-  alt: "Una instructora ajusta la postura de una alumna sobre el Reformer; las dos se ríen en la sala del sol",
+  alt: "El fundador le da la mano a una nueva socia bajo los arcos iluminados de la entrada; detrás, dos instructoras sonríen",
 };

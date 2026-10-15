@@ -6,7 +6,7 @@ export const portada = {
   titulo: "Esquema de canon e inversión proporcional",
   bajada:
     "Para garantizar transparencia y modularidad, Fosque Reformer implementa un Canon de Ingreso Variable (Smart Scale Fee) ajustado a la capacidad operativa de la sala.",
-  alt: "Instructora y alumna riéndose sobre un Reformer en la sala del sol",
+  alt: "En la sala de las palmeras, una instructora y la coordinadora charlan y se ríen con un inversor junto a un Reformer",
 };
 
 export const esquema = {

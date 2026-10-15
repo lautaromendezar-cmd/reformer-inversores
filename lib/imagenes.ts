@@ -9,11 +9,11 @@ import heroNegocios from "@/assets/img/hero-negocios.jpg";
 import manifiestoRuido from "@/assets/img/manifiesto-ruido.jpg";
 import manifiestoEncuentro from "@/assets/img/manifiesto-encuentro.jpg";
 import manifiestoPortal from "@/assets/img/manifiesto-portal.jpg";
-import salaInstructora from "@/assets/img/sala-instructora.jpg";
-import recepcion from "@/assets/img/recepcion.jpg";
+import negocioRecepcion from "@/assets/img/negocio-recepcion.jpg";
+import negocioSocios from "@/assets/img/negocio-socios.jpg";
+import negocioPortal from "@/assets/img/negocio-portal.jpg";
 import lounge from "@/assets/img/lounge.jpg";
 import kids from "@/assets/img/kids.jpg";
-import equipo from "@/assets/img/equipo.jpg";
 import detalleManos from "@/assets/img/detalle-manos.jpg";
 import sociaOperadora from "@/assets/img/socia-operadora.jpg";
 import fachadaNoche from "@/assets/img/fachada-noche.jpg";
@@ -26,11 +26,11 @@ export const fotos = {
   manifiestoRuido,
   manifiestoEncuentro,
   manifiestoPortal,
-  salaInstructora,
-  recepcion,
+  negocioRecepcion,
+  negocioSocios,
+  negocioPortal,
   lounge,
   kids,
-  equipo,
   detalleManos,
   sociaOperadora,
   fachadaNoche,

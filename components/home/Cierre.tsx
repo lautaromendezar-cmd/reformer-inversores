@@ -1,5 +1,6 @@
 // Cierre de la home: el dossier (la guía descargable, como en las grandes redes de franquicia)
-// y la aplicación corta sobre la foto de la instructora con la alumna.
+// y la aplicación corta: pantalla dividida, el apretón de manos bajo los arcos y el formulario,
+// todo en el alto de una pantalla en escritorio.
 import Image from "next/image";
 import Lockup from "@/components/Lockup";
 import FormularioCorto from "@/components/FormularioCorto";
@@ -48,23 +49,23 @@ export default function Cierre() {
         </div>
       </section>
 
-      <section id="aplicar-corto" className="escena relative isolate scroll-mt-16 overflow-hidden py-[clamp(5rem,12vw,10rem)]" data-luz="noche" aria-labelledby="cierre-titulo">
-        <div className="absolute inset-0 -z-10">
-          <Image src={fotos.salaInstructora} alt={cierre.alt} fill placeholder="blur" sizes="100vw" className="object-cover object-[35%_50%]" />
-          <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgb(23_17_14/0.25)_0%,rgb(23_17_14/0.7)_55%,rgb(23_17_14/0.9)_100%)] max-lg:bg-[linear-gradient(180deg,rgb(23_17_14/0.35)_0%,rgb(23_17_14/0.92)_45%)]" />
+      <section id="aplicar-corto" className="escena relative grid scroll-mt-16 lg:min-h-[100svh] lg:grid-cols-2" data-luz="noche" aria-labelledby="cierre-titulo">
+        <div className="relative min-h-[55svh] overflow-hidden lg:min-h-0">
+          <Image src={fotos.negocioPortal} alt={cierre.alt} fill placeholder="blur" sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[50%_45%]" />
         </div>
-        <div className="contenedor grid grid-cols-12 gap-x-6 gap-y-10 max-lg:pt-[28vh]">
-          <div className="col-span-12 lg:col-span-5 lg:col-start-7">
+        <div className="flex items-center px-4 py-14 sm:px-8 lg:px-[clamp(2.5rem,5vw,6rem)] lg:pb-6 lg:pt-[4.75rem]">
+          <div className="w-full max-w-xl">
             <p className="antetitulo" data-revelar>
               {cierre.antetitulo}
             </p>
-            <h2 id="cierre-titulo" className="mt-5 text-[length:var(--text-h1)] text-hueso" data-revelar="lineas">
+            <h2 id="cierre-titulo" className="mt-4 text-[length:var(--text-h2)] text-hueso" data-revelar="lineas">
               {cierre.titulo}
             </h2>
-            <p className="mt-5 max-w-md text-hueso/80" data-revelar>
+            <p className="mt-4 max-w-md text-hueso/80" data-revelar>
               {cierre.bajada}
             </p>
-            <div className="mt-8">
+            {/* En escritorio el formulario va más apretado para que todo entre en una pantalla */}
+            <div className="mt-6 lg:[&_form]:p-6 lg:[&_form>div:first-child]:gap-4 lg:[&_form_label.mt-6]:mt-4 lg:[&_form>div.mt-7]:mt-5">
               <FormularioCorto origen="home" />
             </div>
           </div>

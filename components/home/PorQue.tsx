@@ -21,7 +21,7 @@ export default function PorQue() {
             </p>
             <div className="relative mt-10 aspect-[4/5] overflow-hidden rounded-[1.25rem] sm:aspect-[16/10] lg:aspect-auto lg:h-[min(46vh,30rem)]">
               <div className="absolute inset-[-8%_0]" data-parallax="10">
-                <Image src={fotos.recepcion} alt={porQue.alt} fill placeholder="blur" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-[62%_50%]" />
+                <Image src={fotos.negocioRecepcion} alt={porQue.alt} fill placeholder="blur" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-[58%_50%] lg:object-[30%_50%]" />
               </div>
             </div>
           </div>

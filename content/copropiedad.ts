@@ -7,7 +7,7 @@ export const portada = {
   titulo: "Sistema de Co-Propiedad (Vesting 50%)",
   bajada:
     "Un modelo dinámico que puede operar sin empleados tradicionales, convirtiendo al staff en socios co-propietarios para garantizar prosperidad económica y alineación de visión compartida.",
-  alt: "El equipo de una sucursal Fosque abrazado en la sala, sonriendo a cámara",
+  alt: "Los socios de una sucursal Fosque en la sala: la coordinadora le da la mano al inversor mientras las instructoras sonríen",
 };
 
 export const vesting = {

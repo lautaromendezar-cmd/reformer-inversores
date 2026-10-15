@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "Co-Propiedad", description: portada.
 export default function CoPropiedadPagina() {
   return (
     <>
-      <PortadaInterna antetitulo={portada.antetitulo} titulo={portada.titulo} bajada={portada.bajada} foto={fotos.equipo} alt={portada.alt} posicion="50% 62%" />
+      <PortadaInterna antetitulo={portada.antetitulo} titulo={portada.titulo} bajada={portada.bajada} foto={fotos.negocioSocios} alt={portada.alt} posicion="50% 46%" />
 
       {/* Programa de vesting */}
       <section className="escena claro py-[clamp(5rem,12vw,10rem)]" data-luz="lino" aria-labelledby="vesting">

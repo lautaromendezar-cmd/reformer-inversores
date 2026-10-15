@@ -39,7 +39,7 @@ export function FotoEquipo({ alt }: { alt: string }) {
   return (
     <div className="relative aspect-[3/4] overflow-hidden rounded-[1.25rem]">
       <div className="absolute inset-[-8%_0]" data-parallax="10">
-        <Image src={fotos.equipo} alt={alt} fill placeholder="blur" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-[50%_60%]" />
+        <Image src={fotos.negocioSocios} alt={alt} fill placeholder="blur" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-[50%_55%]" />
       </div>
       {/* Velo cálido: la sala de palmeras es verdosa y el resto del sitio vive en 2700K */}
       <div aria-hidden="true" className="absolute inset-0 bg-[#f4a950] opacity-50 mix-blend-soft-light" />
