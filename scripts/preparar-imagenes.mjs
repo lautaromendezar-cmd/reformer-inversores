@@ -1,19 +1,20 @@
 // Lleva las fuentes (crudos de IA en assets/gen/out y renders en assets/renders, ambos fuera
-// del repo) a JPEG de 2400 px máx. en assets/img/, que es lo que importa next/image.
+// del repo) a JPEG de 3840 px máx. en assets/img/, que es lo que importa next/image.
+// Las que se ven grandes tienen fuente en 4k (pasada de Nano Banana "mantener idéntica" en 4k).
 // next/image después sirve AVIF/WebP al tamaño justo. Uso: npm run imagenes
 import sharp from "sharp";
 import { mkdirSync, existsSync } from "node:fs";
 
 const lista = [
-  ["assets/gen/out/hero-negocios-a.png", "hero-negocios"],
-  ["assets/gen/out/manifiesto-ruido-calle-2.png", "manifiesto-ruido"],
-  ["assets/gen/out/manifiesto-encuentro.png", "manifiesto-encuentro"],
+  ["assets/gen/out/hero-negocios-a-logo.png", "hero-negocios"],
+  ["assets/gen/out/manifiesto-ruido-calle-2-4k.png", "manifiesto-ruido"],
+  ["assets/gen/out/manifiesto-encuentro-logo.png", "manifiesto-encuentro"],
   // Recorte: la fachada corrida a la derecha para que el cartel no choque con "Bienvenidos a Fosque"
-  ["assets/gen/out/manifiesto-portal.png", "manifiesto-portal", { left: 0, top: 380, width: 1954, height: 1099 }],
+  ["assets/gen/out/manifiesto-portal-4k.png", "manifiesto-portal", { left: 0, top: 760, width: 3908, height: 2198 }],
   // Recorte: afuera la máquina expendedora de la derecha (traía marcas)
-  ["assets/gen/out/negocio-recepcion.png", "negocio-recepcion", { left: 0, top: 0, width: 2394, height: 1536 }],
-  ["assets/gen/out/negocio-socios.png", "negocio-socios"],
-  ["assets/gen/out/negocio-portal-2.png", "negocio-portal"],
+  ["assets/gen/out/negocio-recepcion-4k.png", "negocio-recepcion", { left: 0, top: 0, width: 4788, height: 3072 }],
+  ["assets/gen/out/negocio-socios-logo.png", "negocio-socios"],
+  ["assets/gen/out/negocio-portal-2-logo.png", "negocio-portal"],
   ["assets/gen/out/lounge.png", "lounge"],
   ["assets/gen/out/kids.png", "kids"],
   ["assets/gen/out/detalle-manos.png", "detalle-manos"],
@@ -30,8 +31,8 @@ for (const [origen, nombre, recorte] of lista) {
   let img = sharp(origen);
   if (recorte) img = img.extract(recorte);
   const info = await img
-    .resize({ width: 2400, withoutEnlargement: true })
-    .jpeg({ quality: 82, mozjpeg: true })
+    .resize({ width: 3840, height: 3840, fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 88, mozjpeg: true })
     .toFile(`assets/img/${nombre}.jpg`);
   console.log(nombre, info.width + "x" + info.height, Math.round(info.size / 1024) + " KB");
 }

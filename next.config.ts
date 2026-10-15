@@ -4,7 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    deviceSizes: [420, 640, 828, 1080, 1280, 1600, 1920],
+    // Hasta 3840 para pantallas grandes y retina; calidad 85 (la 75 por defecto se veía blanda)
+    deviceSizes: [420, 640, 828, 1080, 1280, 1600, 1920, 2560, 3840],
+    qualities: [85],
   },
   async headers() {
     // Bajo NDA: mientras NEXT_PUBLIC_ALLOW_INDEXING no sea "true", cada respuesta lleva noindex
