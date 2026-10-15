@@ -2,7 +2,8 @@
 
 // Manifiesto "Nuevo Ciclo": tres estrofas que se encienden palabra por palabra mientras la luz
 // pasa de fría a 2700K. Cada estrofa tiene su foto de fondo, graduada con la luz del contador:
-// la ciudad con ruido (fría), el encuentro en la sala (neutra) y la fachada como portal (2700K).
+// la calle con la fachada apagada y gente apurada (fría), el encuentro en la sala (neutra) y la
+// misma fachada encendida como portal (2700K): el antes y el después del mismo lugar.
 //
 // Cómo funciona: la sección mide 340vh y adentro hay un escenario `sticky` de 100vh (no se usa
 // pin de GSAP: así los marcadores del arco de luz quedan en el flujo y el Motor cambia el fondo
@@ -25,7 +26,7 @@ const KELVIN = [6500, 2700];
 // Una foto por estrofa. Decorativas (alt vacío): el texto del manifiesto ya dice todo.
 // `pos` es el encuadre en mobile, donde sólo entra una franja: la persona o la fachada.
 const FONDOS = [
-  { src: fotos.manifiestoRuido, pos: "object-[80%_50%]" },
+  { src: fotos.manifiestoRuido, pos: "object-[77%_50%]" },
   { src: fotos.manifiestoEncuentro, pos: "object-[76%_50%]" },
   { src: fotos.manifiestoPortal, pos: "object-[95%_50%]" },
 ];

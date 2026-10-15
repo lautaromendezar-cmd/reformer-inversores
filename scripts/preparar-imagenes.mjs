@@ -6,7 +6,7 @@ import { mkdirSync, existsSync } from "node:fs";
 
 const lista = [
   ["assets/gen/out/hero-negocios-a.png", "hero-negocios"],
-  ["assets/gen/out/manifiesto-ruido.png", "manifiesto-ruido"],
+  ["assets/gen/out/manifiesto-ruido-calle-2.png", "manifiesto-ruido"],
   ["assets/gen/out/manifiesto-encuentro.png", "manifiesto-encuentro"],
   // Recorte: la fachada corrida a la derecha para que el cartel no choque con "Bienvenidos a Fosque"
   ["assets/gen/out/manifiesto-portal.png", "manifiesto-portal", { left: 0, top: 380, width: 1954, height: 1099 }],
