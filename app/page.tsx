@@ -11,7 +11,7 @@ import Postulacion from "@/components/landing/Postulacion";
 import Follaje from "@/components/Follaje";
 
 // La landing B2B: los 7 bloques del Documento Maestro (18-nov-2026), en el orden del boceto de
-// Gerardo. Claro (lino) con dos bloques oscuros de contraste: el salón y el manifiesto.
+// Gerardo. Base clara (lino); en oscuro van las cifras, los niveles, la comparativa y el manifiesto.
 //   1 Hero + 4 cifras · 2 Método · 3 Comparativa · 4 Salón, formatos y simulador ·
 //   5 Sistema llave en mano · 6 Manifiesto · 7 Territorios + formulario
 export default function Landing() {
@@ -25,7 +25,7 @@ export default function Landing() {
       <Salon />
       <Sistema />
       <Manifiesto />
-      <section id="territorios" className="bloque relative isolate overflow-clip bg-lino-hondo" aria-labelledby="territorios-titulo">
+      <section id="territorios" className="bloque relative isolate overflow-clip bg-lino" aria-labelledby="territorios-titulo">
         <Follaje composicion="pie" />
         <div className="contenedor grid grid-cols-12 items-start gap-x-6 gap-y-14 lg:gap-x-12">
           <div className="col-span-12 lg:col-span-5">

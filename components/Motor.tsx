@@ -10,6 +10,9 @@
 //   [data-foto]                  → la foto se descubre de abajo hacia arriba, se asienta y enfoca
 //   [data-leer]                  → el texto se enciende palabra por palabra con el scroll
 //   [data-progreso]              → línea de progreso de lectura (header)
+//   [data-mezclar]               → las letras se mezclan y se rearman al pasar el mouse (por su
+//                                  [data-mezclar-zona] más cercana, si la hay). Los antetítulos
+//                                  con data-revelar también se mezclan al aparecer.
 //   [data-parallax="12"]         → parallax vertical con scrub
 //   [data-contar]                → los <span data-n="24"> de adentro cuentan desde 0
 //   [data-magnetico]             → se acerca un poco al puntero (sólo escritorio)
@@ -21,12 +24,13 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import Lenis from "lenis";
 import { luces, type Luz, type NombreLuz } from "@/lib/luz";
 import { duracion, ease, escalonado, consultaEscritorio } from "@/lib/motion";
 import { precargaLista } from "@/lib/precarga";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
 // Flip se registra donde se usa (niveles y territorios).
 
 let lenis: Lenis | null = null;
@@ -218,6 +222,20 @@ export default function Motor() {
         );
       });
 
+      // ---- Antetítulos: las letras se mezclan y se arman al aparecer ----
+      if (!reducido) {
+        document.querySelectorAll<HTMLElement>(".antetitulo[data-revelar]").forEach((el) => {
+          if (oculto(el) || el.children.length) return;
+          const texto = el.textContent ?? "";
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 88%",
+            once: true,
+            onEnter: () => gsap.to(el, { duration: 1, ease: "none", scrambleText: { text: texto, chars: "lowerCase", speed: 0.45 } }),
+          });
+        });
+      }
+
       // ---- Progreso de lectura (la línea del header) ----
       const progreso = document.querySelector<HTMLElement>("[data-progreso]");
       if (progreso && !reducido) {
@@ -272,6 +290,34 @@ export default function Motor() {
         });
       }
     });
+
+    // ---- Mezcla al pasar el mouse: sólo con puntero fino ----
+    if (!reducido && window.matchMedia("(pointer: fine)").matches) {
+      document.querySelectorAll<HTMLElement>("[data-mezclar]").forEach((el) => {
+        const texto = el.textContent ?? "";
+        const zona = el.closest<HTMLElement>("[data-mezclar-zona]") ?? el;
+        let medido = false;
+        const jugar = () => {
+          if (!medido) {
+            // Ancho fijo: mientras se mezclan, las letras no empujan lo de al lado
+            medido = true;
+            el.style.display = "inline-block";
+            el.style.width = `${el.getBoundingClientRect().width}px`;
+            el.style.whiteSpace = "nowrap";
+            el.style.overflow = "hidden";
+            el.style.verticalAlign = "bottom";
+          }
+          gsap.to(el, { duration: 0.55, ease: "none", overwrite: true, scrambleText: { text: texto, chars: "lowerCase", speed: 0.6 } });
+        };
+        zona.addEventListener("pointerenter", jugar);
+        quitar.push(() => {
+          zona.removeEventListener("pointerenter", jugar);
+          gsap.killTweensOf(el);
+          el.textContent = texto;
+          el.style.cssText = "";
+        });
+      });
+    }
 
     // ---- Magnetismo de los CTA: sólo escritorio ----
     if (!reducido) {

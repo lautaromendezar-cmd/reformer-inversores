@@ -6,7 +6,8 @@
 // foto, que cambia con cada paso descubriéndose de abajo hacia arriba. El fondo de la sección
 // cambia de tono con cada paso.
 // Es `position: sticky`, no pin de GSAP: sobrevive a los refresh y no hay saltos de layout.
-// Mobile: los pasos van uno debajo del otro, cada uno con su foto.
+// Mobile: la foto queda fija bajo el header y cambia con cada paso (con el mismo cambio de tono);
+// los textos suben por debajo.
 
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef } from "react";
@@ -43,14 +44,60 @@ const TONOS = ["#f2e5cb", "#ecd7b6", "#dde2cd", "#edd9cd"]; // dorado · ámbar 
 const OCULTA = "inset(100% 0% 0% 0%)";
 const VISIBLE = "inset(0% 0% 0% 0%)";
 
+/** El relato en celular y tablet: un disparador por paso cambia la foto fija y el tono del fondo. */
+function relatoMovil(el: HTMLElement | null) {
+  if (!el) return;
+  const reducido = movimientoReducido();
+  const seccion = el.closest("section");
+  const imagenes = gsap.utils.toArray<HTMLElement>("[data-m-foto]", el);
+  const contador = el.querySelector<HTMLElement>("[data-m-contador]");
+  const teñir = (color: string) => gsap.to(seccion, { backgroundColor: color, duration: reducido ? 0 : 0.9, ease: "power2.out", overwrite: "auto" });
+  let actual = 0;
+  const ir = (n: number) => {
+    if (n === actual) return;
+    const baja = n > actual;
+    const desde = actual;
+    actual = n;
+    teñir(TONOS[n]);
+    if (contador) contador.textContent = String(n + 1).padStart(2, "0");
+    gsap.set(imagenes, { zIndex: 0 });
+    gsap.set(imagenes[desde], { zIndex: 1, clipPath: VISIBLE });
+    gsap.set(imagenes[n], { zIndex: 2 });
+    if (reducido) {
+      gsap.set(imagenes[n], { clipPath: VISIBLE });
+      return;
+    }
+    gsap.fromTo(imagenes[n], { clipPath: baja ? OCULTA : "inset(0% 0% 100% 0%)" }, { clipPath: VISIBLE, duration: 0.95, ease: "power4.inOut", overwrite: true });
+    gsap.fromTo(imagenes[n].querySelector("img"), { scale: 1.2, filter: "blur(12px)" }, { scale: 1, filter: "blur(0px)", duration: 1.3, ease: "power3.out", overwrite: true });
+  };
+  const disparadores = gsap.utils.toArray<HTMLElement>("[data-m-paso]", el).map((paso, i) =>
+    ScrollTrigger.create({ trigger: paso, start: "top 66%", end: "bottom 66%", onToggle: (s) => s.isActive && ir(i) }),
+  );
+  disparadores.push(
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 55%",
+      end: "bottom 45%",
+      onToggle: (s) => teñir(s.isActive ? TONOS[actual] : BASE),
+      onLeaveBack: () => ir(0), // al volver para arriba, la foto vuelve a la primera
+    }),
+  );
+  return () => {
+    disparadores.forEach((d) => d.kill());
+    gsap.killTweensOf(seccion);
+    gsap.set(seccion, { clearProps: "backgroundColor" });
+  };
+}
+
 export default function Metodo() {
   const pista = useRef<HTMLDivElement>(null);
+  const movil = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = pista.current;
     if (!el) return;
-    // Sólo escritorio (en mobile los pasos van apilados y esta pista no se dibuja)
-    if (!window.matchMedia("(min-width: 1024px)").matches) return;
+    // En celular y tablet el relato es otro: la foto queda fija arriba y los pasos pasan por debajo
+    if (!window.matchMedia("(min-width: 1024px)").matches) return relatoMovil(movil.current);
     {
       const textos = gsap.utils.toArray<HTMLElement>("[data-paso-texto]", el);
       const imagenes = gsap.utils.toArray<HTMLElement>("[data-paso-foto]", el);
@@ -183,7 +230,7 @@ export default function Metodo() {
         </div>
       </div>
 
-      {/* ---------- Mobile y tablet: los pasos en fila ---------- */}
+      {/* ---------- Mobile y tablet: foto fija + pasos ---------- */}
       <div className="contenedor pt-[clamp(4.5rem,10vw,8.5rem)] lg:hidden">
         <p className="antetitulo" data-revelar>
           {metodo.antetitulo}
@@ -191,26 +238,34 @@ export default function Metodo() {
         <h2 className="mt-5 text-[length:var(--text-h2)]" data-revelar="palabras">
           {metodo.titulo}
         </h2>
-        <ol className="mt-10 space-y-14">
-          {pasos.map((p, i) => (
-            <li key={i}>
-              <div className="overflow-hidden rounded-[1.5rem]" data-foto>
-                <div className="relative aspect-[4/5]">
-                  <Image src={p.foto} alt={p.alt} fill placeholder="blur" sizes="94vw" className={`object-cover ${p.encuadre}`} />
+        {/* La foto queda fija bajo el header y cambia con cada paso; los textos suben por debajo */}
+        <div ref={movil} className="mt-8">
+          <div className="sticky top-[var(--alto-header)] z-10 h-[42svh] overflow-hidden rounded-[1.5rem] bg-noche/10 shadow-[0_2rem_3rem_-2rem_rgb(23_17_14/0.5)]">
+            {pasos.map((p, i) => (
+              <div key={i} data-m-foto className="absolute inset-0 overflow-hidden" style={i > 0 ? { clipPath: OCULTA } : { zIndex: 1 }}>
+                <Image src={p.foto} alt={p.alt} fill placeholder="blur" sizes="94vw" className={`object-cover ${p.encuadre}`} />
+              </div>
+            ))}
+            <span className="cifra absolute bottom-3 left-3 z-10 rounded-full bg-noche/70 px-3 py-1.5 text-[0.75rem] text-hueso backdrop-blur-md" aria-hidden="true">
+              <span data-m-contador>01</span> / {String(pasos.length).padStart(2, "0")}
+            </span>
+          </div>
+          <ol>
+            {pasos.map((p, i) => (
+              <li key={i} data-m-paso className="min-h-[56svh] pt-10">
+                <div data-escalonar>
+                  {p.numero && <p className="cifra acento text-[length:var(--text-chico)]">{p.numero}</p>}
+                  {p.titulo && <h3 className="mt-2 text-[length:var(--text-h3)]">{p.titulo}</h3>}
+                  {p.textos.map((t, j) => (
+                    <p key={j} className={`mt-3 ${!p.titulo && j === 0 ? "text-[length:var(--text-h3)] leading-snug" : "suave"}`}>
+                      {t}
+                    </p>
+                  ))}
                 </div>
-              </div>
-              <div className="mt-6" data-escalonar>
-                {p.numero && <p className="cifra acento text-[length:var(--text-chico)]">{p.numero}</p>}
-                {p.titulo && <h3 className="mt-2 text-[length:var(--text-h3)]">{p.titulo}</h3>}
-                {p.textos.map((t, j) => (
-                  <p key={j} className={`mt-3 ${!p.titulo && j === 0 ? "text-[length:var(--text-h3)] leading-snug" : "suave"}`}>
-                    {t}
-                  </p>
-                ))}
-              </div>
-            </li>
-          ))}
-        </ol>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
 
       <div className="h-[clamp(3rem,7vw,6rem)] lg:hidden" />

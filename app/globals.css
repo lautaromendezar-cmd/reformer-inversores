@@ -458,7 +458,7 @@ html.precargando body {
   margin-top: calc(-0.875rem + 2px);
   border-radius: 50%;
   background: var(--lleno-color);
-  border: 4px solid var(--color-papel);
+  border: 4px solid var(--color-noche);
   box-shadow:
     0 0 0 1px var(--lleno-color),
     0 0.25rem 0.9rem rgb(154 90 20 / 0.35);
@@ -468,7 +468,7 @@ html.precargando body {
   height: 1.75rem;
   border-radius: 50%;
   background: var(--lleno-color);
-  border: 4px solid var(--color-papel);
+  border: 4px solid var(--color-noche);
   box-shadow:
     0 0 0 1px var(--lleno-color),
     0 0.25rem 0.9rem rgb(154 90 20 / 0.35);
@@ -477,43 +477,82 @@ html.precargando body {
   outline-offset: 6px;
 }
 
-/* ---------- Comparativa: tabla con la columna propia en oscuro ---------- */
+/* ---------- Comparativa: tabla oscura, filas alternadas, columna que se ilumina ----------
+   La primera columna (las variables) queda fuera de las franjas y fija al deslizar. La columna
+   sobre la que está el mouse lleva .activa (components/landing/Comparativa.tsx). */
 .comparativa {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
-  min-width: 64rem;
+  min-width: 66rem;
 }
 .comparativa th,
 .comparativa td {
-  padding: 1.15rem 1.25rem;
+  padding: 1.1rem 1.25rem;
   text-align: left;
-  vertical-align: top;
-}
-.comparativa tbody th,
-.comparativa tbody td {
-  border-top: 1px solid var(--regla);
+  vertical-align: middle;
+  transition:
+    background-color 0.35s var(--ease-salida),
+    color 0.35s;
 }
 .comparativa .variable {
   position: sticky;
   left: 0;
   z-index: 1;
-  width: 11rem;
+  width: 12rem;
   padding-left: 0;
-  background: var(--color-lino);
+  background: var(--color-corteza);
+}
+.comparativa thead th:not(.variable) {
+  padding-block: 1.5rem;
+  border-radius: 1rem 1rem 0 0;
+}
+.comparativa tbody tr:last-child td {
+  border-radius: 0 0 1rem 1rem;
+}
+.comparativa tbody tr:nth-child(odd) td {
+  background: rgb(239 231 221 / 0.05);
+}
+.comparativa [data-col].activa {
+  background: rgb(239 231 221 / 0.12);
+  color: var(--color-hueso);
+}
+.comparativa tbody tr:nth-child(odd) [data-col].activa {
+  background: rgb(239 231 221 / 0.17);
 }
 .comparativa .propia {
-  width: 18rem;
+  width: 19rem;
+  background: rgb(244 169 80 / 0.13);
+  color: var(--color-hueso);
+}
+.comparativa tbody tr:nth-child(odd) .propia {
+  background: rgb(244 169 80 / 0.19);
+}
+.comparativa .propia.activa {
+  background: rgb(244 169 80 / 0.28);
+}
+.comparativa tbody tr:nth-child(odd) .propia.activa {
+  background: rgb(244 169 80 / 0.34);
+}
+
+/* ---------- Ventajas del salón: tarjetas que pasan sobre el Reformer ---------- */
+.ventaja {
+  display: flex;
+  flex-direction: column;
+  min-height: 15rem;
+  padding: clamp(1.5rem, 2.2vw, 2.25rem);
+  border-radius: 1.5rem;
+  background: var(--color-papel);
+  box-shadow: 0 2.5rem 4rem -2.5rem rgb(23 17 14 / 0.5);
+  transition:
+    background-color 0.45s var(--ease-salida),
+    color 0.45s var(--ease-salida);
+}
+.ventaja:hover {
   background: var(--color-noche);
   color: var(--color-hueso);
-  border-top-color: rgb(239 231 221 / 0.14);
-}
-.comparativa thead .propia {
-  border-radius: 1.25rem 1.25rem 0 0;
-}
-.comparativa tbody tr:last-child .propia {
-  border-radius: 0 0 1.25rem 1.25rem;
-  padding-bottom: 1.5rem;
+  --acento: var(--color-ambar);
+  --suave: rgb(239 231 221 / 0.74);
 }
 
 /* ---------- Los 4 niveles (components/landing/Niveles.tsx) ----------
@@ -731,7 +770,7 @@ html.precargando body {
 }
 .sistema-vivo .sistema-titular h2 {
   max-width: 17ch;
-  font-size: clamp(3.25rem, 8.4vw, 11rem);
+  font-size: clamp(2.75rem, 8.4vw, 11rem);
   line-height: 0.96;
 }
 .sistema-vivo .sistema-cartas {
@@ -749,8 +788,8 @@ html.precargando body {
 }
 .sistema-vivo .sistema-carta {
   flex: none;
-  width: clamp(18rem, 26vw, 30rem);
-  max-height: 72svh;
+  width: clamp(17rem, 26vw, 30rem);
+  max-height: 68svh;
   box-shadow: 0 3rem 5rem -2.5rem rgb(23 17 14 / 0.55);
 }
 /* No todas a la misma altura: unas suben, otras bajan */
@@ -763,6 +802,13 @@ html.precargando body {
   margin-bottom: 3vh;
 }
 .sistema-vivo .sistema-carta:nth-child(3n) {
-  width: clamp(20rem, 31vw, 36rem);
+  width: clamp(18.5rem, 31vw, 36rem);
   aspect-ratio: 1 / 1;
+}
+
+/* En celular la barra fija de abajo tapa unos 5 rem: las tarjetas del Sistema se apoyan más arriba */
+@media (max-width: 767px) {
+  .sistema-vivo .sistema-cartas {
+    padding-bottom: 6.5rem;
+  }
 }

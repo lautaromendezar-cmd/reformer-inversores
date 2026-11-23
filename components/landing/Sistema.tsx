@@ -7,7 +7,8 @@
 // pasa por el centro (las de los costados se desenfocan y se achican apenas) y su foto se corre
 // por dentro del marco. Las tarjetas van a distintas alturas y tamaños: no es una grilla.
 // Es `position: sticky` + scrub (no pin de GSAP). La altura de la pista se mide en cada refresh.
-// Mobile, sin JS o con "reducir movimiento": título y grilla de tarjetas (estilos en globals.css).
+// Funciona igual en celular (tarjetas más angostas). Sin JS o con "reducir movimiento": título y
+// grilla de tarjetas (estilos en globals.css).
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -27,7 +28,7 @@ export default function Sistema() {
 
   useEffect(() => {
     const el = raiz.current;
-    if (!el || movimientoReducido() || !window.matchMedia("(min-width: 1024px)").matches) return;
+    if (!el || movimientoReducido()) return;
     el.classList.add("sistema-vivo");
     const pista = el.querySelector<HTMLElement>("[data-sistema-pista]")!;
     const fila = el.querySelector<HTMLElement>("[data-sistema-fila]")!;
@@ -84,7 +85,7 @@ export default function Sistema() {
   }, []);
 
   return (
-    <section ref={raiz} id="sistema" className="bg-lino" aria-labelledby="sistema-titulo">
+    <section ref={raiz} id="sistema" className="bg-lino-hondo" aria-labelledby="sistema-titulo">
       <div data-sistema-pista>
         <div className="sistema-escenario pb-[clamp(4.5rem,10vw,8.5rem)] pt-[clamp(4.5rem,10vw,8.5rem)] [.sistema-vivo_&]:p-0">
           <div className="sistema-titular contenedor" data-sistema-titular>

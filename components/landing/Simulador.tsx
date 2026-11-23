@@ -47,7 +47,7 @@ export default function Simulador() {
   };
 
   return (
-    <div ref={panel} id="simulador" className="claro rounded-[1.75rem] bg-papel p-6 sm:p-10 lg:p-12">
+    <div ref={panel} id="simulador" className="oscuro rounded-[1.75rem] bg-noche p-6 sm:p-10 lg:p-12">
       <div className="grid grid-cols-12 gap-x-6 gap-y-10 lg:gap-x-12">
         <div className="col-span-12 lg:col-span-6">
           <p className="antetitulo">{t.etiqueta}</p>
@@ -58,7 +58,7 @@ export default function Simulador() {
             <label htmlFor="sim-camas" className="text-[length:var(--text-chico)] font-semibold">
               {t.control}
             </label>
-            <output htmlFor="sim-camas" className="cifra whitespace-nowrap text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] text-ambar-hondo">
+            <output htmlFor="sim-camas" className="cifra whitespace-nowrap text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] text-luz">
               {camas} <span className="text-[0.45em] tracking-normal">{t.unidad}</span>
             </output>
           </div>
@@ -81,7 +81,7 @@ export default function Simulador() {
           </div>
 
           <div className="regla mt-8 border-t pt-6">
-            <Planta reformers={t.max} encendidos={camas} m2={250} m2Max={250} titulo={`Planta de la sala: ${camas} de ${t.max} Reformers`} className="h-auto max-h-[8.5rem] w-full text-noche" />
+            <Planta reformers={t.max} encendidos={camas} m2={250} m2Max={250} titulo={`Planta de la sala: ${camas} de ${t.max} Reformers`} className="h-auto max-h-[8.5rem] w-full text-hueso" />
             <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
               <p>
                 <span className="suave block text-[length:var(--text-dato)]">{t.formato}</span>
@@ -97,32 +97,32 @@ export default function Simulador() {
         </div>
 
         <dl className="col-span-12 grid content-start gap-4 sm:grid-cols-2 lg:col-span-6">
-          <div className="rounded-[1.25rem] bg-lino-hondo/70 p-6">
-            <dt className="antetitulo !text-noche/65">{t.canon.titulo}</dt>
+          <div className="rounded-[1.25rem] bg-hueso/[0.07] p-6">
+            <dt className="antetitulo !text-hueso/65">{t.canon.titulo}</dt>
             <dd className="cifra mt-4 whitespace-nowrap text-[clamp(1.6rem,1.2rem+1.5vw,2.25rem)]">
               USD <span data-num="canon">{fmt(INICIAL.canon)}</span>
             </dd>
             <dd className="suave mt-2 text-[length:var(--text-dato)]">{t.canon.pie}</dd>
           </div>
-          <div className="rounded-[1.25rem] bg-lino-hondo/70 p-6">
-            <dt className="antetitulo !text-noche/65">{t.capex.titulo}</dt>
-            <dd className="cifra mt-4 whitespace-nowrap text-[clamp(1.6rem,1.2rem+1.5vw,2.25rem)] text-ambar-hondo">
+          <div className="rounded-[1.25rem] bg-hueso/[0.07] p-6">
+            <dt className="antetitulo !text-hueso/65">{t.capex.titulo}</dt>
+            <dd className="cifra mt-4 whitespace-nowrap text-[clamp(1.6rem,1.2rem+1.5vw,2.25rem)] text-luz">
               USD <span data-num="capex">{fmt(INICIAL.capex)}</span>
             </dd>
             <dd className="suave mt-2 text-[length:var(--text-dato)]">{t.capex.pie}</dd>
           </div>
-          <div className="rounded-[1.25rem] bg-lino-hondo/70 p-6">
-            <dt className="antetitulo !text-noche/65">{t.facturacion.titulo}</dt>
+          <div className="rounded-[1.25rem] bg-hueso/[0.07] p-6">
+            <dt className="antetitulo !text-hueso/65">{t.facturacion.titulo}</dt>
             <dd className="cifra mt-4 text-[clamp(1.6rem,1.2rem+1.5vw,2.25rem)]">
               +<span data-num="facturacion">{fmt(INICIAL.facturacion)}</span>%
             </dd>
             <dd className="suave mt-2 text-[length:var(--text-dato)]">{t.facturacion.pie}</dd>
           </div>
-          <div className="oscuro flex flex-col rounded-[1.25rem] bg-noche p-6">
-            <dt className="antetitulo">{t.retorno.titulo}</dt>
+          <div className="claro flex flex-col rounded-[1.25rem] bg-ambar p-6">
+            <dt className="antetitulo !text-noche/70">{t.retorno.titulo}</dt>
             <dd className="cifra mt-4 text-[clamp(1.6rem,1.2rem+1.5vw,2.25rem)]">{t.retorno.valor}</dd>
             <dd className="mt-auto pt-5">
-              <a href="#postular" onClick={postular} className="enlace-flecha text-[length:var(--text-chico)] text-luz">
+              <a href="#postular" onClick={postular} className="enlace-flecha text-[length:var(--text-chico)] text-noche">
                 {t.retorno.cta} <span aria-hidden="true">→</span>
               </a>
             </dd>

@@ -1,11 +1,25 @@
-// Bloque 3: la comparativa global. Tabla real (accesible), con la columna de Fosque en oscuro.
-// En mobile se desliza de costado y la primera columna queda fija.
+"use client";
 
+// Bloque 3: la comparativa global, sobre fondo oscuro. Tabla real (accesible) con filas
+// alternadas; al pasar el mouse por una columna, la columna entera se ilumina. La de Fosque va
+// destacada en ámbar desde el principio. En mobile se desliza de costado y la primera columna
+// queda fija. Los estilos de .comparativa están en globals.css.
+
+import { useState } from "react";
 import { comparativa as t } from "@/content/landing";
 
+const FOSQUE = t.columnas.length; // índice de la columna propia
+
 export default function Comparativa() {
+  const [col, setCol] = useState<number | null>(null);
+  const sobre = (e: React.MouseEvent) => {
+    const celda = (e.target as HTMLElement).closest<HTMLElement>("[data-col]");
+    setCol(celda ? Number(celda.dataset.col) : null);
+  };
+  const activa = (i: number) => (col === i ? "activa" : "");
+
   return (
-    <section id="comparativa" className="bloque bg-lino" aria-labelledby="comparativa-titulo">
+    <section id="comparativa" className="oscuro bloque bg-corteza" aria-labelledby="comparativa-titulo">
       <div className="contenedor">
         <div className="grid grid-cols-12 gap-x-6 gap-y-5">
           <div className="col-span-12 lg:col-span-8">
@@ -27,21 +41,21 @@ export default function Comparativa() {
 
         {/* El margen negativo deja que la tabla llegue al borde de la pantalla al deslizar */}
         <div className="-mx-[clamp(1rem,2.6vw,3rem)] mt-4 overflow-x-auto px-[clamp(1rem,2.6vw,3rem)] pb-4 lg:mt-14" tabIndex={0} role="region" aria-labelledby="comparativa-titulo">
-          <table className="comparativa text-[length:var(--text-chico)]">
+          <table className="comparativa text-[length:var(--text-chico)]" onMouseOver={sobre} onMouseLeave={() => setCol(null)}>
             <thead>
               <tr>
-                <th scope="col" className="variable antetitulo !text-noche/60">
+                <th scope="col" className="variable text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.18em] text-hueso/55">
                   Variable clave
                 </th>
-                {t.columnas.map((c) => (
-                  <th key={c.nombre} scope="col">
+                {t.columnas.map((c, j) => (
+                  <th key={c.nombre} scope="col" data-col={j} className={activa(j)}>
                     <span className="block font-semibold uppercase tracking-[0.06em]">{c.nombre}</span>
-                    <span className="suave mt-1 block text-[length:var(--text-dato)] font-normal uppercase tracking-[0.12em]">{c.origen}</span>
+                    <span className="mt-1 block text-[length:var(--text-dato)] font-normal uppercase tracking-[0.12em] text-hueso/55">{c.origen}</span>
                   </th>
                 ))}
-                <th scope="col" className="propia">
+                <th scope="col" data-col={FOSQUE} className={`propia ${activa(FOSQUE)}`}>
                   <span className="block text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.16em] text-ambar">{t.propia.origen}</span>
-                  <span className="titulo mt-1 block text-[1.25rem]">{t.propia.nombre}</span>
+                  <span className="titulo mt-1 block text-[1.375rem]">{t.propia.nombre}</span>
                 </th>
               </tr>
             </thead>
@@ -49,15 +63,15 @@ export default function Comparativa() {
               {t.filas.map((f, i) => (
                 <tr key={f.variable}>
                   <th scope="row" className="variable font-semibold">
-                    <span className="cifra mr-2 text-ambar-hondo">{i + 1}</span>
+                    <span className="cifra mr-2 text-ambar">{i + 1}</span>
                     {f.variable}
                   </th>
                   {f.otras.map((o, j) => (
-                    <td key={j} className="suave">
+                    <td key={j} data-col={j} className={`suave ${activa(j)}`}>
                       {o}
                     </td>
                   ))}
-                  <td className="propia">
+                  <td data-col={FOSQUE} className={`propia ${activa(FOSQUE)}`}>
                     <strong className="font-semibold text-luz">{f.fosque[0]}</strong>
                     {f.fosque[1]}
                   </td>

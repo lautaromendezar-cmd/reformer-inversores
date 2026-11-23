@@ -49,6 +49,22 @@ territorios. Es fondo: no subir opacidades ni bajar el desenfoque hasta que comp
   oculta, se abre hasta pantalla completa; al final entra la Ecuación Financiera. Sin JS queda en
   fila. La foto es vertical en mobile: por eso `sizes` pide 400vw (si no, se ve borrosa).
 
+## Menos lineal (24-nov)
+
+- **Capas:** cada sección lleva `.capa` + `data-capa`: se monta sobre el final de la anterior
+  (`--solape`) y su borde de arriba es un arco que el Motor aplana mientras sube. El solape es menor
+  que el padding de abajo de la sección anterior. **Arcos, no olas** (Gerardo pidió sacar las ondas
+  en el B2C). Si los hijos pintan en las esquinas, la sección necesita `overflow-clip`. Manifiesto
+  deja una franja lisa abajo para que el solape no tape la figura.
+- **Comparativa** oscura (`bg-corteza`), filas alternadas, hover por columna (`.activa`).
+- **Salón** claro: apertura centrada con fotos flotantes (sólo escritorio), ventajas como tarjetas
+  escalonadas que pasan sobre el Reformer `sticky` (sin tomar el scroll), simulador oscuro.
+- **Mezcla de letras** (`data-mezclar`, ScrambleTextPlugin): menú, pie, estados de territorios y
+  antetítulos al aparecer. Sólo textos cortos; el ancho se fija al primer hover.
+- **Footer:** `FraseVuelo` arma el titular del hero letra por letra con el scroll.
+- Luz: van en oscuro cifras, niveles, comparativa y manifiesto; el resto es claro. No sumar más
+  tramos con el scroll tomado (ya hay tres: hero, Método, Sistema).
+
 ## Scroll horizontal (components/landing/Sistema.tsx)
 
 Los 6 pilares cruzan la pantalla de derecha a izquierda por encima del título gigante, que se apaga

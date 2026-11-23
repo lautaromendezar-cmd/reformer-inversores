@@ -8,8 +8,8 @@
 // - Reaccionan al mouse: cada hoja se corre según su profundidad (las cercanas más, las lejanas
 //   menos) y una luz tibia sigue al cursor, como si hubiera alguien del otro lado del vidrio.
 // - Es fondo: opacidades bajas, sin contraste. Nunca compite con el texto.
-// - Se pausa cuando no está en pantalla. Con "reducir movimiento" queda quieto. En táctil sólo
-//   se mece.
+// - Se pausa cuando no está en pantalla. Con "reducir movimiento" queda quieto. En táctil se
+//   mece y además se corre con el scroll.
 //
 // Uso: ponerlo como primer hijo de una sección `relative isolate overflow-clip` (clip y no
 // hidden: con hidden se rompen los `sticky` de adentro):
@@ -18,7 +18,10 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { movimientoReducido } from "@/lib/motion";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ---------- Geometría de una fronda de palma (determinista: igual en servidor y cliente) ----------
 
@@ -159,7 +162,25 @@ export default function Follaje({ composicion = "hero", tono = "claro", intensid
       quitar.push(() => io.disconnect());
 
       // 3) El mouse: sólo con puntero fino
-      if (!window.matchMedia("(pointer: fine)").matches) return;
+      if (!window.matchMedia("(pointer: fine)").matches) {
+        // Táctil: no hay cursor. Las hojas se corren con el scroll, las cercanas más que las lejanas.
+        const hojas = gsap.utils.toArray<HTMLElement>("[data-hoja-mueve]").map((h) => ({
+          p: Number(h.dataset.hojaMueve),
+          y: gsap.quickTo(h, "y", { duration: 0.9, ease: "power3.out" }),
+          r: gsap.quickTo(h, "rotation", { duration: 1.2, ease: "power3.out" }),
+        }));
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top bottom",
+          end: "bottom top",
+          onUpdate: (s) =>
+            hojas.forEach((c) => {
+              c.y((0.5 - s.progress) * c.p * 3);
+              c.r((s.progress - 0.5) * c.p * 0.14);
+            }),
+        });
+        return;
+      }
       const capas = gsap.utils.toArray<HTMLElement>("[data-hoja-mueve]").map((h) => {
         const p = Number(h.dataset.hojaMueve);
         return {

@@ -75,8 +75,8 @@ export default function Header() {
             <ul className="flex items-center">
               {navegacion.map((n, i) => (
                 <li key={n.href}>
-                  <Link href={n.href} className="group flex items-start gap-1 rounded-full px-3.5 py-2 text-[0.9375rem] text-noche/75 transition-colors duration-300 hover:bg-noche/[0.07] hover:text-noche">
-                    {n.etiqueta}
+                  <Link href={n.href} data-mezclar-zona className="group flex items-start gap-1 rounded-full px-3.5 py-2 text-[0.9375rem] text-noche/75 transition-colors duration-300 hover:bg-noche/[0.07] hover:text-noche">
+                    <span data-mezclar>{n.etiqueta}</span>
                     <sup className="cifra mt-0.5 text-[0.5625rem] tracking-normal text-noche/40 transition-colors duration-300 group-hover:text-ambar-hondo" aria-hidden="true">
                       {String(i + 1).padStart(2, "0")}
                     </sup>

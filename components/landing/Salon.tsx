@@ -1,8 +1,12 @@
 "use client";
 
-// Bloque 4 (oscuro): el salón. La foto de la clase se abre con el scroll (de un recorte
-// redondeado a todo el ancho) mientras la imagen se asienta; después las cuatro ventajas con el
-// Reformer, los dos formatos con su planta a escala y el simulador.
+// Bloque 4 (claro): el salón.
+// 1) Apertura: título y bajada centrados, con fotos flotando alrededor que se mueven a distinta
+//    velocidad con el scroll. En escritorio van a los costados; en celular, arriba y abajo.
+// 2) La foto de la coreografía, que se abre con el scroll.
+// 3) Las cuatro ventajas: el Reformer queda fijo detrás y las tarjetas, escalonadas en dos
+//    columnas, le pasan por encima.
+// 4) Los dos formatos con su planta a escala y el simulador (tarjeta oscura).
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -16,12 +20,26 @@ import { movimientoReducido } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Fotos de la apertura: posición, tamaño y cuánto se desplazan (px) con el scroll.
+const flotantes = [
+  { foto: fotos.metodoSalaLlena, clase: "left-[-6vw] top-[1%] z-[1] aspect-[3/4] w-[36vw] lg:left-[-2vw] lg:top-[2%] lg:w-[17vw]", v: 70 },
+  { foto: fotos.lounge, clase: "left-[5vw] top-[80%] z-[2] aspect-[4/3] w-[44vw] lg:left-[6vw] lg:top-[54%] lg:w-[19vw]", v: 200 },
+  { foto: fotos.salonDomo, clase: "right-[-5vw] top-[5%] z-[2] aspect-[4/3] w-[46vw] lg:right-[-3vw] lg:top-[8%] lg:w-[21vw]", v: 160 },
+  { foto: fotos.metodoInstructores, clase: "right-[4vw] top-[77%] z-[1] aspect-[3/4] w-[30vw] lg:right-[6vw] lg:top-[50%] lg:w-[15vw]", v: 60 },
+];
+
 export default function Salon() {
   const raiz = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (movimientoReducido()) return;
     const ctx = gsap.context(() => {
+      // Las fotos de la apertura: cada una a su velocidad
+      gsap.utils.toArray<HTMLElement>("[data-flotante]").forEach((f) => {
+        // En celular las fotos son más chicas y están más cerca del texto: se mueven menos
+        const v = Number(f.dataset.flotante) * (window.innerWidth < 1024 ? 0.35 : 1);
+        gsap.fromTo(f, { y: v }, { y: -v, ease: "none", scrollTrigger: { trigger: "[data-salon-apertura]", start: "top bottom", end: "bottom top", scrub: 0.5 } });
+      });
       // La foto se abre: recorte → cuadro completo
       gsap
         .timeline({ scrollTrigger: { trigger: "[data-salon-foto]", start: "top 92%", end: "top 18%", scrub: 0.6 } })
@@ -33,6 +51,8 @@ export default function Salon() {
         { y: 16, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", stagger: 0.12, scrollTrigger: { trigger: "[data-salon-foto]", start: "top 30%", once: true } },
       );
+      // El Reformer fijo se acerca despacio mientras pasan las ventajas
+      gsap.fromTo("[data-ventajas-foto] img", { scale: 1 }, { scale: 1.14, ease: "none", scrollTrigger: { trigger: "[data-ventajas]", start: "top bottom", end: "bottom top", scrub: true } });
       // Los Reformers de cada planta se encienden de a uno
       gsap.utils.toArray<HTMLElement>("[data-formato]").forEach((f) => {
         gsap.fromTo(
@@ -46,25 +66,35 @@ export default function Salon() {
   }, []);
 
   return (
-    <section ref={raiz} id="formatos" className="oscuro bloque bg-noche" aria-labelledby="salon-titulo">
-      <div className="contenedor">
-        <div className="grid grid-cols-12 gap-x-6 gap-y-5">
-          <div className="col-span-12 lg:col-span-8">
+    <section ref={raiz} id="formatos" className="claro relative overflow-clip bg-lino pb-[clamp(4.5rem,10vw,8.5rem)]" aria-labelledby="salon-titulo">
+      {/* 1 · Apertura */}
+      <div className="relative py-[62vw] lg:py-[clamp(5rem,20vh,13rem)]" data-salon-apertura>
+        <div aria-hidden="true">
+          {flotantes.map((f, i) => (
+            <div key={i} data-flotante={f.v} className={`absolute overflow-hidden rounded-[1.5rem] shadow-[0_2.5rem_4rem_-2.5rem_rgb(23_17_14/0.5)] will-change-transform ${f.clase}`}>
+              <Image src={f.foto} alt="" fill placeholder="blur" sizes="(min-width: 1024px) 22vw, 46vw" className="object-cover" />
+            </div>
+          ))}
+        </div>
+        <div className="contenedor relative z-[3]">
+          <div className="mx-auto text-center lg:max-w-[min(42rem,44vw)]">
             <p className="antetitulo" data-revelar>
               {salon.antetitulo}
             </p>
             <h2 id="salon-titulo" className="mt-5 text-[length:var(--text-h2)]" data-revelar="palabras">
               {salon.titulo}
             </h2>
+            <p className="suave mt-6" data-revelar>
+              {salon.bajada}
+            </p>
           </div>
-          <p className="suave col-span-12 max-w-md self-end lg:col-span-4" data-revelar>
-            {salon.bajada}
-          </p>
         </div>
+      </div>
 
-        {/* La foto del salón */}
-        <figure className="relative mt-[clamp(2.5rem,6vw,4.5rem)]">
-          <div className="relative overflow-hidden rounded-[1.5rem]" data-salon-foto>
+      <div className="contenedor">
+        {/* 2 · La foto del salón */}
+        <figure className="relative">
+          <div className="oscuro relative overflow-hidden rounded-[1.5rem]" data-salon-foto>
             <div className="relative aspect-[4/5] sm:aspect-[16/9] xl:aspect-[2/1]">
               <Image src={fotos.claseSalonSol} alt={salon.alt} fill placeholder="blur" sizes="96vw" className="object-cover" />
             </div>
@@ -87,26 +117,28 @@ export default function Salon() {
           </div>
         </figure>
 
-        {/* Las cuatro ventajas, con el Reformer */}
-        <div className="mt-[clamp(4rem,8vw,7rem)] grid grid-cols-12 items-center gap-x-6 gap-y-12 lg:gap-x-12">
-          <ol className="col-span-12 grid gap-x-10 sm:grid-cols-2 lg:col-span-7" data-escalonar="0.1">
+        {/* 3 · Las cuatro ventajas: el Reformer fijo y las tarjetas pasándole por encima */}
+        <div className="mt-[clamp(4rem,8vw,7rem)] grid grid-cols-12 gap-x-6" data-ventajas>
+          <div className="sticky top-[calc(var(--alto-header)+0.75rem)] col-span-12 self-start lg:top-[13vh] lg:col-start-1 lg:col-end-9 lg:row-start-1">
+            <div className="overflow-hidden rounded-[1.75rem]">
+              <div className="relative aspect-[3/2]" data-ventajas-foto>
+                <Image src={fotos.reformerTresCuartos} alt={salon.altReformer} fill placeholder="blur" sizes="(min-width: 1024px) 62vw, 94vw" className="object-cover" />
+              </div>
+            </div>
+          </div>
+          <ol className="relative z-10 col-span-12 -mt-[14vw] grid items-start gap-5 px-3 sm:grid-cols-2 sm:px-6 lg:px-0 lg:col-start-6 lg:col-end-13 lg:row-start-1 lg:mt-0 lg:gap-x-6 lg:gap-y-[10vh] lg:pb-[6vh] lg:pt-[38vh]">
             {ventajas.map((v, i) => (
-              <li key={v.titulo} className="pilar py-7" data-encender>
+              <li key={v.titulo} className={`ventaja ${i % 2 ? "lg:mt-[16vh]" : ""}`} data-revelar>
                 <span className="antetitulo">Ventaja {String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-3 text-[length:var(--text-h3)]">{v.titulo}</h3>
-                <p className="suave mt-2 text-[length:var(--text-chico)]">{v.texto}</p>
+                <h3 className="mt-4 text-[length:var(--text-h3)]">{v.titulo}</h3>
+                <p className="suave mt-3 text-[length:var(--text-chico)]">{v.texto}</p>
               </li>
             ))}
           </ol>
-          <div className="col-span-12 overflow-hidden rounded-[1.5rem] lg:col-span-5" data-foto>
-            <div className="relative aspect-[4/3]">
-              <Image src={fotos.reformerTresCuartos} alt={salon.altReformer} fill placeholder="blur" sizes="(min-width: 1024px) 38vw, 94vw" className="object-cover" />
-            </div>
-          </div>
         </div>
 
-        {/* Los dos formatos: planta a escala + ficha */}
-        {/* Dos columnas iguales, alineadas arriba. Las plantas comparten el alto y la escala (250 m²
+        {/* 4 · Los dos formatos: planta a escala + ficha.
+            Dos columnas iguales, alineadas arriba. Las plantas comparten el alto y la escala (250 m²
             = ancho completo), así la Compacta se ve más angosta que la Flagship, a escala real. */}
         <div className="mt-[clamp(4rem,8vw,7rem)] grid items-start gap-x-[clamp(2rem,5vw,5rem)] gap-y-14 lg:grid-cols-2">
           {formatos.map((f) => (
@@ -117,7 +149,7 @@ export default function Salon() {
                   m2={f.m2[1]}
                   m2Max={250}
                   titulo={`Planta del formato ${f.nombre}: hasta ${f.reformers[1]} Reformers en ${f.m2[1]} m²`}
-                  className="h-full w-auto max-w-full text-hueso"
+                  className="h-full w-auto max-w-full text-noche"
                 />
               </div>
               <h3 className="mt-7 text-[clamp(1.5rem,1.2rem+1.2vw,2rem)]" data-revelar>
@@ -132,7 +164,7 @@ export default function Salon() {
                 ].map(([k, v], i) => (
                   <div key={k} className="regla grid min-h-[4.25rem] grid-cols-[1fr_auto] items-center gap-4 border-t py-3">
                     <dt className="suave">{k}</dt>
-                    <dd className={`cifra text-right !leading-snug ${i === 3 ? "text-[1.125rem] text-luz" : ""}`}>{v}</dd>
+                    <dd className={`cifra text-right !leading-snug ${i === 3 ? "text-[1.125rem] text-ambar-hondo" : ""}`}>{v}</dd>
                   </div>
                 ))}
                 <div className="regla border-t py-3">

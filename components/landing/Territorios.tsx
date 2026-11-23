@@ -72,13 +72,15 @@ export default function Territorios() {
 
       <ul ref={lista} className="relative mt-6" data-escalonar="0.06">
         {t.lista.map((z) => (
-          <li key={z.nombre} data-pais={z.pais} className="regla grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-x-3 border-t py-4">
+          <li key={z.nombre} data-pais={z.pais} data-mezclar-zona className="regla grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-x-3 border-t py-4">
             <span className="cifra text-[length:var(--text-dato)] text-noche/55">{z.pais}</span>
             <span>
               <span className="block font-semibold leading-snug">{z.nombre}</span>
               <span className="suave mt-1 block text-[length:var(--text-chico)]">{z.formato}</span>
             </span>
-            <span className={`text-right text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.1em] ${tono[z.estado] ?? ""}`}>{z.estado}</span>
+            <span data-mezclar className={`text-right text-[length:var(--text-dato)] font-semibold uppercase tracking-[0.1em] ${tono[z.estado] ?? ""}`}>
+              {z.estado}
+            </span>
           </li>
         ))}
       </ul>

@@ -22,6 +22,8 @@ import pilarPreventa from "@/assets/img/pilar-preventa.jpg";
 import pilarSocietario from "@/assets/img/pilar-societario.jpg";
 import pilarTablero from "@/assets/img/pilar-tablero.jpg";
 import detalleManos from "@/assets/img/detalle-manos.jpg";
+import lounge from "@/assets/img/lounge.jpg";
+import salonDomo from "@/assets/img/salon-domo.jpg";
 import reformerTresCuartos from "@/assets/img/reformer-tres-cuartos.jpg";
 
 export const fotos = {
@@ -33,6 +35,9 @@ export const fotos = {
   muralMontana,
   muralFigura,
   reformerTresCuartos,
+  // Apertura del salón (fotos flotantes), de la tanda de octubre
+  lounge,
+  salonDomo,
   // Los 6 pilares del Sistema (scroll horizontal). Fachada, corredor y manos son de octubre;
   // preventa, societario y tablero se hicieron el 23-nov-2026 con el reparto de edades variadas
   // (6 créditos; prompts en assets/gen/out/sistema-23-nov/).
