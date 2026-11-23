@@ -41,10 +41,7 @@ que me confirmes estos puntos. Casi todos se responden con una palabra.
 11. **Dossier Financiero.** El botón principal lo ofrece. ¿Ya existe el PDF?
     Mientras tanto, el formulario avisa que se lo enviamos después.
 
-12. **Dirección de la página.** ¿Va en fosquereformer.com/franquicias? ¿Ese dominio ya está comprado?
-
 ### Lo que necesito que me pases
 
-13. El **WhatsApp comercial** al que van las consultas.
-14. El **email** donde querés recibir las postulaciones.
-15. La **autorización del estudio de arquitectura** para usar los renders.
+12. El **WhatsApp comercial** al que van las consultas.
+13. El **email** donde querés recibir las postulaciones.

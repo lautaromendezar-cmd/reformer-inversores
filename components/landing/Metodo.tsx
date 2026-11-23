@@ -70,9 +70,31 @@ function relatoMovil(el: HTMLElement | null) {
     gsap.fromTo(imagenes[n], { clipPath: baja ? OCULTA : "inset(0% 0% 100% 0%)" }, { clipPath: VISIBLE, duration: 0.95, ease: "power4.inOut", overwrite: true });
     gsap.fromTo(imagenes[n].querySelector("img"), { scale: 1.2, filter: "blur(12px)" }, { scale: 1, filter: "blur(0px)", duration: 1.3, ease: "power3.out", overwrite: true });
   };
-  const disparadores = gsap.utils.toArray<HTMLElement>("[data-m-paso]", el).map((paso, i) =>
+  const pasosEl = gsap.utils.toArray<HTMLElement>("[data-m-paso]", el);
+  const disparadores = pasosEl.map((paso, i) =>
     ScrollTrigger.create({ trigger: paso, start: "top 66%", end: "bottom 66%", onToggle: (s) => s.isActive && ir(i) }),
   );
+  // El texto se desvanece y sube apenas antes de llegar al borde de la foto fija: nunca queda
+  // cortado debajo de ella. `pie` es la altura del borde inferior de la foto en la pantalla.
+  const foto = el.querySelector<HTMLElement>("[data-m-marco]");
+  // (el `top` del sticky, no su offsetTop: ese es la posición dentro de la página, no en pantalla)
+  const pie = () => (foto ? parseFloat(getComputedStyle(foto).top) + foto.offsetHeight : 0) + 12;
+  if (!reducido) {
+    // Párrafo por párrafo: un paso largo no desaparece entero cuando sólo su principio llegó a la foto
+    pasosEl.flatMap((paso) => Array.from(paso.firstElementChild!.children) as HTMLElement[]).forEach((contenido) => {
+      const t = gsap.fromTo(
+        contenido,
+        { opacity: 1, y: 0 },
+        {
+          opacity: 0,
+          y: -24,
+          ease: "power1.in",
+          scrollTrigger: { trigger: contenido, start: () => `top ${pie() + 90}px`, end: () => `top ${pie() - 4}px`, scrub: true, invalidateOnRefresh: true },
+        },
+      );
+      disparadores.push(t.scrollTrigger!);
+    });
+  }
   disparadores.push(
     ScrollTrigger.create({
       trigger: el,
@@ -240,7 +262,7 @@ export default function Metodo() {
         </h2>
         {/* La foto queda fija bajo el header y cambia con cada paso; los textos suben por debajo */}
         <div ref={movil} className="mt-8">
-          <div className="sticky top-[var(--alto-header)] z-10 h-[42svh] overflow-hidden rounded-[1.5rem] bg-noche/10 shadow-[0_2rem_3rem_-2rem_rgb(23_17_14/0.5)]">
+          <div data-m-marco className="sticky top-[var(--alto-header)] z-10 h-[36svh] overflow-hidden rounded-[1.5rem] bg-noche/10 shadow-[0_2rem_3rem_-2rem_rgb(23_17_14/0.5)]">
             {pasos.map((p, i) => (
               <div key={i} data-m-foto className="absolute inset-0 overflow-hidden" style={i > 0 ? { clipPath: OCULTA } : { zIndex: 1 }}>
                 <Image src={p.foto} alt={p.alt} fill placeholder="blur" sizes="94vw" className={`object-cover ${p.encuadre}`} />
@@ -252,8 +274,8 @@ export default function Metodo() {
           </div>
           <ol>
             {pasos.map((p, i) => (
-              <li key={i} data-m-paso className="min-h-[56svh] pt-10">
-                <div data-escalonar>
+              <li key={i} data-m-paso className="min-h-[38svh] pt-6">
+                <div data-revelar>
                   {p.numero && <p className="cifra acento text-[length:var(--text-chico)]">{p.numero}</p>}
                   {p.titulo && <h3 className="mt-2 text-[length:var(--text-h3)]">{p.titulo}</h3>}
                   {p.textos.map((t, j) => (
