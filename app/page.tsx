@@ -1,25 +1,41 @@
-import Hero from "@/components/home/Hero";
-import Cifras from "@/components/home/Cifras";
-import Manifiesto from "@/components/home/Manifiesto";
-import PorQue from "@/components/home/PorQue";
-import CoPropiedad from "@/components/home/CoPropiedad";
-import Formatos from "@/components/home/Formatos";
-import Quiz from "@/components/home/Quiz";
-import Cierre from "@/components/home/Cierre";
+import Hero from "@/components/landing/Hero";
+import Cifras from "@/components/landing/Cifras";
+import Metodo from "@/components/landing/Metodo";
+import Niveles from "@/components/landing/Niveles";
+import Comparativa from "@/components/landing/Comparativa";
+import Salon from "@/components/landing/Salon";
+import Sistema from "@/components/landing/Sistema";
+import Manifiesto from "@/components/landing/Manifiesto";
+import Territorios from "@/components/landing/Territorios";
+import Postulacion from "@/components/landing/Postulacion";
+import Follaje from "@/components/Follaje";
 
-// Recorrido de la luz: noche (hero) → lino (cifras) → frío → 2700K (manifiesto) → corteza →
-// lino → noche (formatos) → arena (quiz) → corteza (dossier) → noche (aplicación y footer).
-export default function Home() {
+// La landing B2B: los 7 bloques del Documento Maestro (18-nov-2026), en el orden del boceto de
+// Gerardo. Claro (lino) con dos bloques oscuros de contraste: el salón y el manifiesto.
+//   1 Hero + 4 cifras · 2 Método · 3 Comparativa · 4 Salón, formatos y simulador ·
+//   5 Sistema llave en mano · 6 Manifiesto · 7 Territorios + formulario
+export default function Landing() {
   return (
     <>
       <Hero />
       <Cifras />
+      <Metodo />
+      <Niveles />
+      <Comparativa />
+      <Salon />
+      <Sistema />
       <Manifiesto />
-      <PorQue />
-      <CoPropiedad />
-      <Formatos />
-      <Quiz />
-      <Cierre />
+      <section id="territorios" className="bloque relative isolate overflow-clip bg-lino-hondo" aria-labelledby="territorios-titulo">
+        <Follaje composicion="pie" />
+        <div className="contenedor grid grid-cols-12 items-start gap-x-6 gap-y-14 lg:gap-x-12">
+          <div className="col-span-12 lg:col-span-5">
+            <Territorios />
+          </div>
+          <div className="col-span-12 lg:sticky lg:top-24 lg:col-span-7" data-revelar>
+            <Postulacion />
+          </div>
+        </div>
+      </section>
     </>
   );
 }

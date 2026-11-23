@@ -26,14 +26,14 @@ export async function POST(req: Request) {
   }
 
   const lead = r.data;
-  const remitente = process.env.LEADS_FROM_EMAIL?.trim() || "Fosque Reformer Partners <onboarding@resend.dev>";
+  const remitente = process.env.LEADS_FROM_EMAIL?.trim() || "Fosque Reformer Franquicias <onboarding@resend.dev>";
   try {
     const resend = new Resend(clave);
     const { error } = await resend.emails.send({
       from: remitente,
       to: destino.split(",").map((s) => s.trim()),
       replyTo: lead.email,
-      subject: `Nuevo lead${lead.perfil ? ` · ${lead.perfil}` : ""}: ${lead.nombre}`,
+      subject: `Postulación B2B · ${lead.zona}: ${lead.nombre}`,
       text: comoTexto(lead),
     });
     if (error) throw new Error(error.message);
@@ -47,14 +47,12 @@ export async function POST(req: Request) {
 function comoTexto(l: Lead): string {
   const filas: [string, string | undefined][] = [
     ["Nombre", l.nombre],
-    ["Email", l.email],
     ["WhatsApp", l.whatsapp],
-    ["Ciudad / país de interés", l.ubicacion],
-    ["Perfil", l.perfil],
+    ["Email", l.email],
+    ["Zona de interés", l.zona],
+    ["Perfil de participación", l.perfil],
     ["Capital disponible", l.capital],
-    ["Formato de interés", l.formato],
-    ["Pidió el dossier", l.dossier ? "Sí" : undefined],
-    ["Comentario", l.comentario],
+    ["Simulador", l.camas ? `${l.camas} Reformers` : undefined],
     ["Origen", l.origen],
   ];
   return filas

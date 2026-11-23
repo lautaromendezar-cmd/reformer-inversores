@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Tokens. Misma marca que el B2C (manual de Fosque Reformer), en
-   registro de deal room: suelo noche/corteza en vez de marrón, y la
-   LUZ (ámbar 2700K) como acento. El tricolor de la fachada queda sólo
-   como firma (línea del preloader).
+   Tokens. Misma marca que el B2C (manual de Fosque Reformer).
+   Desde el 22-nov-2026 el sitio es CLARO ("más luz, más simple, más
+   clara"): suelo lino, tinta noche, y la luz ámbar como acento. Los
+   bloques oscuros (.oscuro) son el contraste, no la base.
    Contrastes medidos: ámbar sobre noche 9,5 · noche sobre ámbar 9,5 ·
    ambar-hondo sobre lino 4,7 · corteza sobre lino 10,8.
 ------------------------------------------------------------------- */
@@ -17,11 +17,11 @@
   --color-hueso: #efe7dd;
   --color-lino: #f4eee6;
   --color-lino-hondo: #e9e0d4;
+  --color-papel: #fbf8f3;
   --color-manteca: #ffe08c;
   --color-ambar: #f4a950;
   --color-ambar-hondo: #9a5a14;
   --color-luz: #ffc37a;
-  --color-frio: #1d2a2e;
   --color-magenta: #e83e8c;
   --color-coral: #f35d55;
   --color-naranja: #f89b1c;
@@ -30,33 +30,58 @@
   --font-cuerpo: var(--font-figtree), "Figtree", system-ui, sans-serif;
   --peso-titulo: 600;
 
-  /* Escala fluida. Las cifras son protagonistas: tienen su propio tamaño. */
-  --text-cifra: clamp(3.25rem, 1.6rem + 6.2vw, 7.5rem);
-  --text-display: clamp(2.75rem, 1.1rem + 7vw, 7.5rem);
-  --text-h1: clamp(2.125rem, 1rem + 4.4vw, 4.5rem);
-  --text-h2: clamp(1.75rem, 1.1rem + 2.4vw, 3rem);
-  --text-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.625rem);
-  --text-manifiesto: clamp(1.625rem, 0.9rem + 2.9vw, 3.5rem);
-  --text-cuerpo: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
-  --text-chico: clamp(0.875rem, 0.84rem + 0.12vw, 0.9375rem);
-  --text-dato: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+  /* Escala fluida */
+  --text-hero: clamp(2.125rem, 1.1rem + 3.9vw, 6rem);
+  --text-h2: clamp(1.875rem, 1.15rem + 2.6vw, 4rem);
+  --text-h3: clamp(1.25rem, 1rem + 0.8vw, 1.875rem);
+  --text-cita: clamp(1.5rem, 1rem + 2vw, 2.625rem);
+  --text-cifra: clamp(1.875rem, 1.2rem + 1.8vw, 3.5rem);
+  --text-cuerpo: clamp(1.0625rem, 0.9rem + 0.36vw, 1.3125rem);
+  --text-chico: clamp(0.875rem, 0.78rem + 0.24vw, 1.0625rem);
+  --text-dato: clamp(0.75rem, 0.69rem + 0.14vw, 0.875rem);
 
   --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ------------------------------------------------------------------
-   El arco de luz (components/Motor.tsx): una variable de fondo y una de
-   tinta que las escenas oscuras van cambiando con el scroll.
+   Contexto claro / oscuro. El sitio es claro por defecto; un bloque
+   .oscuro (o un .claro anidado) redefine estas variables y todo lo de
+   adentro (antetítulos, reglas, botones de línea, foco, deslizador) las
+   hereda. Se pueden anidar en cualquier orden.
 ------------------------------------------------------------------- */
+:root,
+.claro {
+  --tinta: var(--color-noche);
+  --acento: var(--color-ambar-hondo);
+  --regla: rgb(23 17 14 / 0.14);
+  --suave: rgb(23 17 14 / 0.7);
+  --pista: rgb(23 17 14 / 0.18);
+  --lleno-color: var(--color-ambar-hondo);
+}
+.oscuro {
+  --tinta: var(--color-hueso);
+  --acento: var(--color-ambar);
+  --regla: rgb(239 231 221 / 0.16);
+  --suave: rgb(239 231 221 / 0.74);
+  --pista: rgb(239 231 221 / 0.22);
+  --lleno-color: var(--color-luz);
+}
+.claro,
+.oscuro {
+  color: var(--tinta);
+}
+
 :root {
-  --luz-fondo: #17110e;
-  --luz-tinta: #efe7dd;
+  /* components/Motor.tsx puede mover estas dos (arco de luz entre .escena). La landing no usa
+     escenas: cada sección pinta su propio fondo. */
+  --luz-fondo: #f4eee6;
+  --luz-tinta: #17110e;
   --alto-header: 4.5rem;
 }
 
 html {
   background: var(--luz-fondo);
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -71,102 +96,174 @@ body {
   overflow-x: clip;
 }
 
-/* Bloques claros: pintan su propio fondo (nunca dependen del arco). */
-.claro { color: var(--color-noche); }
-.claro[data-luz="lino"] { background: var(--color-lino); }
-.claro[data-luz="arena"] { background: var(--color-lino-hondo); }
-html:not(.motor-listo) .escena[data-luz="frio"] { background: var(--color-frio); }
-html:not(.motor-listo) .escena[data-luz="corteza"] { background: var(--color-corteza); }
-html:not(.motor-listo) .escena[data-luz="k2700"] { background: #4a2c12; }
+/* Las anclas del menú no quedan debajo del header fijo */
+[id] {
+  scroll-margin-top: calc(var(--alto-header) + 0.5rem);
+}
 
-h1, h2, h3, .titulo {
+h1,
+h2,
+h3,
+.titulo {
   font-family: var(--font-titulo);
   font-weight: var(--peso-titulo);
-  line-height: 1.02;
+  line-height: 1.04;
   letter-spacing: -0.015em;
   text-wrap: balance;
 }
-p { text-wrap: pretty; }
+p {
+  text-wrap: pretty;
+}
 
 @layer components {
-.antetitulo {
-  font-size: var(--text-dato);
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ambar);
-}
-.claro .antetitulo { color: var(--color-ambar-hondo); }
+  .antetitulo {
+    font-size: var(--text-dato);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+  .suave {
+    color: var(--suave);
+  }
+  .acento {
+    color: var(--acento);
+  }
+  .regla {
+    border-color: var(--regla);
+  }
 
-.cifra-caja { container-type: inline-size; }
-.cifra-grande { font-size: min(var(--text-cifra), 20cqi); white-space: nowrap; }
-.cifra {
-  font-family: var(--font-cuerpo);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums lining-nums;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
-}
+  .cifra {
+    font-family: var(--font-cuerpo);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
 
-.contenedor {
-  width: 100%;
-  max-width: 90rem;
-  margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 3.5rem);
-}
+  .contenedor {
+    width: 100%;
+    /* Las secciones van contenidas (88rem); sólo el hero y el header usan .contenedor-ancho y
+       llegan a los costados de la pantalla (pedido del 23-nov). */
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 2.6vw, 3rem);
+  }
+  .contenedor-ancho {
+    max-width: 160rem;
+  }
+  .bloque {
+    padding-block: clamp(4.5rem, 10vw, 8.5rem);
+  }
 
-/* ---------- Botones ---------- */
-.boton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6em;
-  min-height: 3rem;
-  padding: 0.85rem 1.5rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: var(--text-chico);
-  letter-spacing: 0.02em;
-  line-height: 1.2;
-  text-align: center;
-  transition: background-color 0.25s var(--ease-salida), color 0.25s var(--ease-salida), box-shadow 0.35s var(--ease-salida), border-color 0.25s;
-  will-change: transform;
-}
-.boton-luz {
-  background: var(--color-ambar);
-  color: var(--color-noche);
-  box-shadow: 0 0 0 0 rgb(255 195 122 / 0);
-}
-.boton-luz:hover { background: var(--color-luz); box-shadow: 0 0 2.5rem 0.25rem rgb(255 195 122 / 0.35); }
-.boton-linea {
-  border: 1px solid rgb(239 231 221 / 0.4);
-  color: inherit;
-}
-.boton-linea:hover { border-color: var(--color-ambar); color: var(--color-luz); }
-.claro .boton-linea { border-color: rgb(23 17 14 / 0.35); }
-.claro .boton-linea:hover { border-color: var(--color-ambar-hondo); color: var(--color-ambar-hondo); }
+  /* ---------- Botones ---------- */
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 3rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: var(--text-chico);
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    text-align: center;
+    transition:
+      background-color 0.25s var(--ease-salida),
+      color 0.25s var(--ease-salida),
+      box-shadow 0.35s var(--ease-salida),
+      border-color 0.25s;
+    will-change: transform;
+  }
+  .boton:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  /* Principal sobre claro */
+  .boton-noche {
+    background: var(--color-noche);
+    color: var(--color-hueso);
+  }
+  .boton-noche:hover {
+    background: var(--color-corteza-clara);
+  }
+  /* Principal sobre oscuro */
+  .boton-luz {
+    background: var(--color-ambar);
+    color: var(--color-noche);
+  }
+  .boton-luz:hover {
+    background: var(--color-luz);
+    box-shadow: 0 0 2.5rem 0.25rem rgb(255 195 122 / 0.3);
+  }
+  .boton-linea {
+    border: 1px solid var(--pista);
+    color: inherit;
+  }
+  .boton-linea:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+  }
 
-.enlace-flecha {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  font-weight: 600;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 0.15em;
-}
-.enlace-flecha span { transition: transform 0.3s var(--ease-salida); }
-.enlace-flecha:hover span { transform: translateX(0.3em); }
+  .enlace-flecha {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.15em;
+  }
+  .enlace-flecha span {
+    transition: transform 0.3s var(--ease-salida);
+  }
+  .enlace-flecha:hover span {
+    transform: translateX(0.3em);
+  }
+
+  /* ---------- Campos del formulario ---------- */
+  .campo {
+    margin-top: 0.5rem;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--pista);
+    background: rgb(255 255 255 / 0.6);
+    color: var(--color-noche);
+    transition:
+      border-color 0.25s,
+      background-color 0.25s;
+  }
+  .campo::placeholder {
+    color: rgb(23 17 14 / 0.45);
+  }
+  .campo:focus {
+    outline: none;
+    border-color: var(--color-ambar-hondo);
+    background: #fff;
+  }
+  .campo[aria-invalid="true"] {
+    border-color: #b3261e;
+  }
+  select.campo {
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2317110e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
 }
 
 /* ---------- Foco y accesibilidad ---------- */
 /* En @layer base: así una utilidad (focus:outline-none) puede pisarlo donde el foco se marca de otra forma */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-ambar);
+    outline: 2px solid var(--acento);
     outline-offset: 3px;
     border-radius: 4px;
   }
-  .claro :focus-visible { outline-color: var(--color-ambar-hondo); }
 }
 
 .salto {
@@ -175,25 +272,88 @@ p { text-wrap: pretty; }
   top: -4rem;
   z-index: 100;
   padding: 0.75rem 1rem;
-  background: var(--color-ambar);
-  color: var(--color-noche);
+  background: var(--color-noche);
+  color: var(--color-hueso);
   font-weight: 600;
   border-radius: 0.5rem;
 }
-.salto:focus { top: 1rem; }
-
-.sr-only-foco:not(:focus):not(:focus-within) {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+.salto:focus {
+  top: 1rem;
 }
 
 /* ---------- Reveals: sin JS todo es visible ---------- */
-html.motor-listo [data-revelar]:not(.revelado) { opacity: 0; }
-.linea { padding-bottom: 0.08em; }
+html.motor-listo [data-revelar]:not(.revelado) {
+  opacity: 0;
+}
+html.motor-listo [data-escalonar]:not(.revelado) > * {
+  opacity: 0;
+}
+html.motor-listo [data-foto]:not(.revelado) {
+  clip-path: inset(100% 0% 0% 0%);
+}
+.linea {
+  padding-bottom: 0.08em;
+}
+
+/* ---------- Pilares: la regla de arriba se dibuja cuando el pilar cruza la pantalla ---------- */
+.pilar {
+  position: relative;
+  border-top: 1px solid var(--regla);
+}
+.pilar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 2px;
+  width: 100%;
+  background: var(--acento);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-salida);
+}
+.pilar-numero {
+  color: var(--pista);
+  transition: color 0.6s var(--ease-salida);
+}
+.pilar.encendido::before {
+  transform: scaleX(1);
+}
+.pilar.encendido .pilar-numero {
+  color: var(--acento);
+}
+
+/* ---------- Progreso de lectura ---------- */
+.progreso {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-magenta), var(--color-coral), var(--color-naranja), var(--color-ambar));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---------- Enlaces del menú: subrayado que se dibuja ---------- */
+.enlace-menu {
+  position: relative;
+  padding-block: 0.5rem;
+}
+.enlace-menu::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.2rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-salida);
+}
+.enlace-menu:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
 
 /* ---------- Preloader (sólo la primera visita de la sesión) ---------- */
 .precarga {
@@ -202,252 +362,407 @@ html.motor-listo [data-revelar]:not(.revelado) { opacity: 0; }
   z-index: 90;
   display: none;
   place-items: center;
-  background: var(--color-noche);
+  background: var(--color-lino);
+  color: var(--color-noche);
 }
-html.precargando .precarga { display: grid; }
-html.precargando body { overflow: hidden; }
+html.precargando .precarga {
+  display: grid;
+}
+html.precargando body {
+  overflow: hidden;
+}
 .precarga-linea {
   height: 2px;
   width: min(14rem, 50vw);
-  background: linear-gradient(90deg, var(--color-magenta), var(--color-coral), var(--color-naranja), var(--color-luz));
+  background: linear-gradient(90deg, var(--color-magenta), var(--color-coral), var(--color-naranja), var(--color-ambar));
   transform-origin: left;
   transform: scaleX(0);
 }
 
-/* ---------- Cortina entre páginas ---------- */
+/* ---------- Cortina entre páginas (app/template.tsx) ---------- */
 .cortina {
   position: fixed;
   inset: 0;
   z-index: 80;
   pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 110%, #ffc37a 0%, #f4a950 22%, #4a2c12 58%, #17110e 100%);
+  background: var(--color-lino-hondo);
   transform: scaleY(0);
   transform-origin: top;
 }
 
-/* ---------- Cursor (sólo escritorio con puntero fino) ---------- */
-.cursor {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 95;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin: -1.375rem 0 0 -1.375rem;
-  border-radius: 50%;
-  border: 1px solid var(--color-luz);
-  box-shadow: 0 0 1.5rem rgb(255 195 122 / 0.35), inset 0 0 1rem rgb(255 195 122 / 0.15);
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.4);
-  mix-blend-mode: normal;
-}
-
-/* ---------- Grano sutil para que los oscuros no queden planos ---------- */
-.grano::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
 
-/* ---------- Manifiesto (components/home/Manifiesto.tsx) ---------- */
-.manifiesto { padding-block: clamp(6rem, 14vw, 11rem); }
-.manifiesto-marca { position: absolute; left: 0; width: 100%; height: 1px; pointer-events: none; }
-.manifiesto-fondos, .manifiesto-kelvin { display: none; }
-.manifiesto-estrofa + .manifiesto-estrofa { margin-top: 2.5em; }
-.manifiesto-estrofa p { max-width: 22ch; }
-
-.manifiesto.manifiesto-vivo { height: 340vh; padding-block: 0; }
-.manifiesto-vivo .manifiesto-escenario {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-.manifiesto-vivo .manifiesto-estrofas { display: grid; }
-.manifiesto-vivo .manifiesto-estrofa { grid-area: 1 / 1; margin: 0; }
-.manifiesto-vivo .manifiesto-kelvin { display: block; }
-.manifiesto-vivo .manifiesto-fondos { display: block; position: absolute; inset: 0; }
-.manifiesto-vivo .manifiesto-fondo { position: absolute; inset: 0; opacity: 0; }
-.manifiesto-vivo .manifiesto-fondo:first-child { opacity: 1; }
-@media (min-width: 1024px) {
-  .manifiesto-estrofa p { max-width: 26ch; }
-}
-
-/* ---------- Pilares que se encienden (Motor, [data-encender]) ---------- */
-.pilar { position: relative; transition: border-color 0.6s var(--ease-salida); }
-.pilar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: -1px;
-  height: 1px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--color-luz), rgb(255 195 122 / 0));
-  box-shadow: 0 0 14px rgb(255 195 122 / 0.6);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.9s var(--ease-salida);
-}
-.pilar-numero {
-  color: transparent;
-  -webkit-text-stroke: 1px rgb(239 231 221 / 0.35);
-  transition: color 0.6s var(--ease-salida), text-shadow 0.6s var(--ease-salida), -webkit-text-stroke-color 0.6s;
-}
-.pilar.encendido::before { transform: scaleX(1); }
-.pilar.encendido .pilar-numero {
-  color: var(--color-luz);
-  -webkit-text-stroke-color: transparent;
-  text-shadow: 0 0 40px rgb(255 195 122 / 0.45);
-}
-
 /* ---------- Planta de sala (components/Planta.tsx) ---------- */
-.reformer-halo { fill: rgb(255 195 122 / 0.18); filter: blur(3px); transition: fill 0.5s, opacity 0.5s; }
-.reformer-cuerpo { fill: var(--color-luz); transition: fill 0.5s; }
-.reformer-off .reformer-halo { fill: transparent; }
-.reformer-off .reformer-cuerpo { fill: rgb(239 231 221 / 0.18); }
-.claro .reformer-cuerpo { fill: var(--color-ambar); }
-.claro .reformer-off .reformer-cuerpo { fill: rgb(23 17 14 / 0.14); }
-
-/* ---------- Tapa del dossier ---------- */
-.tapa-escena { perspective: 1400px; width: min(22rem, 78vw); }
-.tapa {
-  aspect-ratio: 3 / 4;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(1.5rem, 4vw, 2.25rem);
-  border-radius: 0.5rem 1rem 1rem 0.5rem;
-  background:
-    radial-gradient(90% 60% at 80% 105%, rgb(255 195 122 / 0.55) 0%, rgb(244 169 80 / 0.18) 40%, transparent 70%),
-    linear-gradient(160deg, #3a2616 0%, #17110e 70%);
-  box-shadow:
-    inset 6px 0 0 rgb(0 0 0 / 0.35),
-    inset 7px 0 0 rgb(255 255 255 / 0.06),
-    0 2.5rem 4rem -1.5rem rgb(0 0 0 / 0.7),
-    0 0 6rem -1rem rgb(255 195 122 / 0.25);
-  transform: rotateY(-14deg) rotateX(4deg);
-  transform-origin: left center;
-  transition: transform 0.9s var(--ease-salida), box-shadow 0.9s var(--ease-salida);
+.reformer-halo {
+  fill: rgb(255 195 122 / 0.18);
+  filter: blur(3px);
+  transition: fill 0.4s;
 }
-.tapa-escena:hover .tapa { transform: rotateY(-4deg) rotateX(1deg); }
-@media (prefers-reduced-motion: reduce) { .tapa { transform: none; } }
+.reformer-cuerpo {
+  fill: var(--color-luz);
+  transition: fill 0.4s;
+}
+.reformer-off .reformer-halo {
+  fill: transparent;
+}
+.reformer-off .reformer-cuerpo {
+  fill: rgb(239 231 221 / 0.18);
+}
+.claro .reformer-halo {
+  fill: rgb(244 169 80 / 0.3);
+}
+.claro .reformer-cuerpo {
+  fill: var(--color-ambar-hondo);
+}
+.claro .reformer-off .reformer-halo {
+  fill: transparent;
+}
+.claro .reformer-off .reformer-cuerpo {
+  fill: rgb(23 17 14 / 0.14);
+}
 
-/* ---------- Mapa de la hoja de ruta (components/modelo/MapaRuta.tsx) ---------- */
-.punto { fill: rgb(239 231 221 / 0.16); transition: fill 0.6s var(--ease-salida); }
-.punto-on { fill: var(--color-luz); filter: drop-shadow(0 0 0.35px var(--color-ambar)); }
-.punto-tenue { fill: rgb(244 169 80 / 0.55); }
-
-/* ---------- Control deslizante (simulador y calculadora) ---------- */
-.rango { appearance: none; -webkit-appearance: none; height: 2.75rem; background: transparent; cursor: pointer; }
+/* ---------- Control deslizante del simulador ---------- */
+.rango {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 2.75rem;
+  background: transparent;
+  cursor: pointer;
+}
 .rango::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-luz) var(--lleno, 50%), rgb(239 231 221 / 0.2) var(--lleno, 50%));
+  background: linear-gradient(90deg, var(--lleno-color) var(--lleno, 50%), var(--pista) var(--lleno, 50%));
 }
-.rango::-moz-range-track { height: 4px; border-radius: 999px; background: rgb(239 231 221 / 0.2); }
-.rango::-moz-range-progress { height: 4px; border-radius: 999px; background: var(--color-luz); }
+.rango::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--pista);
+}
+.rango::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--lleno-color);
+}
 .rango::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 1.75rem;
   height: 1.75rem;
   margin-top: calc(-0.875rem + 2px);
   border-radius: 50%;
-  background: var(--color-luz);
-  border: 4px solid var(--color-noche);
-  box-shadow: 0 0 0 1px var(--color-luz), 0 0 18px rgb(255 195 122 / 0.7);
+  background: var(--lleno-color);
+  border: 4px solid var(--color-papel);
+  box-shadow:
+    0 0 0 1px var(--lleno-color),
+    0 0.25rem 0.9rem rgb(154 90 20 / 0.35);
 }
 .rango::-moz-range-thumb {
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  background: var(--color-luz);
-  border: 4px solid var(--color-noche);
-  box-shadow: 0 0 0 1px var(--color-luz), 0 0 18px rgb(255 195 122 / 0.7);
+  background: var(--lleno-color);
+  border: 4px solid var(--color-papel);
+  box-shadow:
+    0 0 0 1px var(--lleno-color),
+    0 0.25rem 0.9rem rgb(154 90 20 / 0.35);
 }
-.rango:focus-visible { outline-offset: 6px; }
-
-/* ---------- Calculadora: el indicador que salta con Flip ---------- */
-.calc-indicador {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: 1rem;
-  background: var(--color-luz);
-  box-shadow: 0 0 2rem rgb(255 195 122 / 0.35);
+.rango:focus-visible {
+  outline-offset: 6px;
 }
 
-/* ---------- Cadena de importación ---------- */
-.nodo-halo { fill: rgb(255 195 122 / 0); transition: fill 0.5s; }
-.nodo-centro { fill: var(--color-corteza-clara); stroke: rgb(239 231 221 / 0.3); stroke-width: 2; transition: fill 0.5s, stroke 0.5s; }
-.nodo-on .nodo-halo { fill: rgb(255 195 122 / 0.22); }
-.nodo-on .nodo-centro { fill: var(--color-luz); stroke: var(--color-luz); }
-.tramo { opacity: 0.7; transition: opacity 0.5s; }
-.tramo-on { opacity: 1; }
-
-/* ---------- Proceso: modo horizontal (lo activa components/proceso/Linea.tsx con el pin) ---------- */
-.proceso-horizontal { height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: 0; }
-.proceso-horizontal .proceso-barra { display: block; }
-.proceso-horizontal .proceso-pista { flex-direction: row; max-width: none; gap: 1.5rem; margin-top: 3rem; padding-right: 30vw; }
-.proceso-horizontal .proceso-pista > li { width: clamp(20rem, 28vw, 26rem); min-height: 52svh; padding: 2.25rem; }
-
-/* ---------- Volúmenes de la Academia ---------- */
-.volumen-libro { position: relative; aspect-ratio: 3 / 4; perspective: 1600px; }
-.volumen-pagina {
-  position: absolute;
-  inset: 0;
-  overflow: auto;
-  padding: 1.75rem 1.5rem;
-  border-radius: 0.4rem 1rem 1rem 0.4rem;
+/* ---------- Comparativa: tabla con la columna propia en oscuro ---------- */
+.comparativa {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 64rem;
+}
+.comparativa th,
+.comparativa td {
+  padding: 1.15rem 1.25rem;
+  text-align: left;
+  vertical-align: top;
+}
+.comparativa tbody th,
+.comparativa tbody td {
+  border-top: 1px solid var(--regla);
+}
+.comparativa .variable {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 11rem;
+  padding-left: 0;
   background: var(--color-lino);
-  color: var(--color-noche);
-  box-shadow: inset 8px 0 14px -10px rgb(0 0 0 / 0.35), 0 2rem 3rem -1.5rem rgb(0 0 0 / 0.6);
 }
-.volumen-tapa {
+.comparativa .propia {
+  width: 18rem;
+  background: var(--color-noche);
+  color: var(--color-hueso);
+  border-top-color: rgb(239 231 221 / 0.14);
+}
+.comparativa thead .propia {
+  border-radius: 1.25rem 1.25rem 0 0;
+}
+.comparativa tbody tr:last-child .propia {
+  border-radius: 0 0 1.25rem 1.25rem;
+  padding-bottom: 1.5rem;
+}
+
+/* ---------- Los 4 niveles (components/landing/Niveles.tsx) ----------
+   Escritorio: cuatro paneles en fila; el activo se abre (flex-grow) y los otros quedan angostos.
+   Mobile: acordeón vertical. Una luz ámbar sigue al cursor dentro de cada panel (--mx, --my). */
+.nivel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(239 231 221 / 0.12);
+  background: rgb(239 231 221 / 0.035);
+  transition:
+    flex-grow 0.85s var(--ease-salida),
+    border-color 0.5s,
+    background-color 0.5s;
+}
+.nivel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 100%), rgb(244 169 80 / 0.26), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.nivel:hover::before {
+  opacity: 0.55;
+}
+.nivel.abierto {
+  border-color: rgb(244 169 80 / 0.45);
+  background: rgb(239 231 221 / 0.06);
+}
+.nivel.abierto::before {
+  opacity: 1;
+}
+.nivel-cabeza {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+}
+.nivel-numero {
+  color: rgb(239 231 221 / 0.35);
+  font-size: 1.5rem;
+  transition: color 0.5s, transform 0.85s var(--ease-salida);
+  transform-origin: left top;
+}
+.nivel.abierto .nivel-numero {
+  color: var(--color-ambar);
+}
+.nivel-nombre {
+  font-size: 1.375rem;
+  transition: opacity 0.35s;
+}
+.nivel-medidor {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 1.25rem;
+}
+.nivel-medidor i {
+  display: block;
+  width: 4px;
+  border-radius: 2px;
+  background: rgb(239 231 221 / 0.2);
+  transition: background-color 0.5s;
+}
+.nivel.abierto .nivel-medidor i.on,
+.nivel:hover .nivel-medidor i.on {
+  background: var(--color-ambar);
+}
+.nivel-cuerpo {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--ease-salida);
+}
+.nivel.abierto .nivel-cuerpo {
+  grid-template-rows: 1fr;
+}
+.nivel-interior {
+  overflow: hidden;
+  padding-inline: 1.25rem;
+}
+.nivel-interior > :last-child {
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .nivel {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .nivel.abierto {
+    flex-grow: 4.2;
+  }
+  .nivel-cabeza {
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.75rem;
+  }
+  .nivel-numero {
+    font-size: 2rem;
+  }
+  .nivel.abierto .nivel-numero {
+    transform: scale(1.9);
+  }
+  .nivel-nombre {
+    font-size: clamp(1.25rem, 0.9rem + 0.8vw, 1.75rem);
+  }
+  .nivel.abierto .nivel-nombre {
+    opacity: 0;
+  }
+  .nivel-medidor {
+    position: absolute;
+    right: 1.75rem;
+    top: 1.9rem;
+    margin: 0;
+  }
+  .nivel-cuerpo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: var(--abierto, 40rem);
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .nivel.abierto .nivel-cuerpo {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nivel-interior {
+    overflow: visible;
+    padding: 0 1.75rem;
+  }
+  .nivel-interior > :last-child {
+    margin-bottom: 1.75rem;
+  }
+}
+
+/* ---------- Hero (components/landing/Hero.tsx) ----------
+   Sin JS (o con "reducir movimiento"): el mensaje a pantalla completa y, debajo, la foto.
+   Con .hero-vivo: la pista mide 300svh y el escenario queda fijo; la foto arranca oculta y se
+   abre sobre el mensaje a medida que se scrollea (lo maneja GSAP). */
+.hero-escenario {
+  position: relative;
+}
+.hero-foto {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin: 0 clamp(1rem, 2.6vw, 3rem) clamp(3rem, 7vw, 6rem);
+  overflow: hidden;
+  border-radius: 1.75rem;
+}
+.hero-vivo .hero-pista {
+  height: 300svh;
+}
+.hero-vivo .hero-escenario {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.hero-vivo .hero-foto {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  aspect-ratio: auto;
+  border-radius: 0;
+  clip-path: inset(100% 22% 0% 22% round 32px);
+}
+/* Las palabras del titular se despegan apenas cuando el cursor pasa cerca */
+.hero-palabra {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ---------- Sistema: scroll horizontal (components/landing/Sistema.tsx) ----------
+   Sin .sistema-vivo (mobile, sin JS, "reducir movimiento"): título + grilla de tarjetas.
+   Con .sistema-vivo: el escenario queda fijo, el título va gigante de fondo y la fila de tarjetas
+   cruza la pantalla de derecha a izquierda, pasándole por encima. */
+.sistema-escenario {
+  position: relative;
+}
+.sistema-carta {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  aspect-ratio: 4 / 5;
+  background: var(--color-noche);
+  color: var(--color-hueso);
+}
+.sistema-vivo .sistema-escenario {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.sistema-vivo .sistema-titular {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 1.75rem 1.5rem;
-  border-radius: 0.4rem 1rem 1rem 0.4rem;
-  background:
-    radial-gradient(90% 60% at 85% 110%, rgb(255 195 122 / 0.45) 0%, transparent 65%),
-    linear-gradient(160deg, var(--tapa) 0%, #17110e 85%);
-  box-shadow: inset 7px 0 0 rgb(0 0 0 / 0.35), inset 8px 0 0 rgb(255 255 255 / 0.06), 0 2rem 3rem -1.5rem rgb(0 0 0 / 0.7);
-  transform-origin: left center;
-  transition: transform 1s var(--ease-salida);
-  backface-visibility: hidden;
-  cursor: pointer;
+  justify-content: center;
+  padding-top: var(--alto-header);
+  max-width: 160rem;
 }
-.volumen.abierto .volumen-tapa { transform: rotateY(-100deg); }
-@media (hover: hover) and (pointer: fine) {
-  .volumen:hover .volumen-tapa, .volumen:focus-within .volumen-tapa { transform: rotateY(-100deg); }
+.sistema-vivo .sistema-titular h2 {
+  max-width: 17ch;
+  font-size: clamp(3.25rem, 8.4vw, 11rem);
+  line-height: 0.96;
 }
-
-/* ---------- Campo grande del formulario de aplicación ---------- */
-.campo-grande {
-  width: 100%;
-  padding: 0.75rem 0;
-  border-bottom: 2px solid rgb(239 231 221 / 0.3);
-  background: transparent;
-  color: var(--color-hueso);
-  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem);
-  transition: border-color 0.3s;
+.sistema-vivo .sistema-cartas {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  width: max-content;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: calc(var(--alto-header) + 1rem) 36vw 1.5rem 101vw; /* 101vw: la primera tarjeta arranca fuera de pantalla, así el título se lee entero */
+  will-change: transform;
 }
-.campo-grande:focus { outline: none; border-color: var(--color-luz); }
-.campo-grande::placeholder { color: rgb(239 231 221 / 0.35); }
-.campo-grande[aria-invalid="true"] { border-color: var(--color-coral); }
+.sistema-vivo .sistema-carta {
+  flex: none;
+  width: clamp(18rem, 26vw, 30rem);
+  max-height: 72svh;
+  box-shadow: 0 3rem 5rem -2.5rem rgb(23 17 14 / 0.55);
+}
+/* No todas a la misma altura: unas suben, otras bajan */
+.sistema-vivo .sistema-carta:nth-child(odd) {
+  align-self: flex-start;
+  margin-top: 3vh;
+}
+.sistema-vivo .sistema-carta:nth-child(even) {
+  align-self: flex-end;
+  margin-bottom: 3vh;
+}
+.sistema-vivo .sistema-carta:nth-child(3n) {
+  width: clamp(20rem, 31vw, 36rem);
+  aspect-ratio: 1 / 1;
+}

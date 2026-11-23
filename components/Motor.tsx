@@ -5,6 +5,11 @@
 //   .escena[data-luz="nombre"]   → al llegar, el fondo pasa a lib/luz.ts[nombre] (arco de luz)
 //   [data-revelar]               → fade + subida al entrar
 //   [data-revelar="lineas"]      → SplitText por líneas con máscara
+//   [data-revelar="palabras"]    → cada palabra sube flotando y se enfoca (titulares)
+//   [data-escalonar]             → los hijos directos entran uno detrás del otro
+//   [data-foto]                  → la foto se descubre de abajo hacia arriba, se asienta y enfoca
+//   [data-leer]                  → el texto se enciende palabra por palabra con el scroll
+//   [data-progreso]              → línea de progreso de lectura (header)
 //   [data-parallax="12"]         → parallax vertical con scrub
 //   [data-contar]                → los <span data-n="24"> de adentro cuentan desde 0
 //   [data-magnetico]             → se acerca un poco al puntero (sólo escritorio)
@@ -22,7 +27,7 @@ import { duracion, ease, escalonado, consultaEscritorio } from "@/lib/motion";
 import { precargaLista } from "@/lib/precarga";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
-// Flip se registra donde se usa (la calculadora de /inversion): no pesa en la home.
+// Flip se registra donde se usa (niveles y territorios).
 
 let lenis: Lenis | null = null;
 /** Para frenar el scroll con el menú abierto. */
@@ -105,23 +110,51 @@ export default function Motor() {
       });
       pintar();
 
+      // Lo que no se está dibujando (p. ej. la versión mobile de un bloque, oculta en escritorio)
+      // no se anima: un ScrollTrigger `once` sobre algo con display:none nace "ya pasado", se mata
+      // a sí mismo mientras se crea y GSAP revienta ("reading 'end'"). Queda visible y listo.
+      const oculto = (el: Element) => el.getClientRects().length === 0;
+
       // ---- Reveals ----
       html.classList.add("motor-listo");
       document.querySelectorAll<HTMLElement>("[data-revelar]").forEach((el) => {
-        if (reducido) {
+        if (reducido || oculto(el)) {
           el.classList.add("revelado");
           return;
         }
-        const lineas = el.dataset.revelar === "lineas";
+        const modo = el.dataset.revelar;
+        const lineas = modo === "lineas";
+        const palabras = modo === "palabras";
         let objetivos: Element[] = [el];
         if (lineas) {
           const split = SplitText.create(el, { type: "lines", linesClass: "linea", autoSplit: true, mask: "lines" });
           splits.push(split);
           objetivos = split.lines;
+        } else if (palabras) {
+          // Titulares: cada palabra sube flotando y se enfoca (sin máscara: nada se corta en seco)
+          const split = SplitText.create(el, { type: "words" });
+          splits.push(split);
+          gsap.fromTo(
+            split.words,
+            { yPercent: 55, opacity: 0, filter: "blur(14px)" },
+            {
+              yPercent: 0,
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 1.5,
+              ease: "expo.out",
+              stagger: 0.055,
+              delay: Number(el.dataset.retraso || 0),
+              scrollTrigger: { trigger: el, start: "top 88%", once: true },
+              onStart: () => el.classList.add("revelado"),
+              clearProps: "filter",
+            },
+          );
+          return;
         }
         gsap.fromTo(
           objetivos,
-          { yPercent: lineas ? 110 : 30, opacity: lineas ? 1 : 0 },
+          { yPercent: lineas ? 115 : 30, opacity: lineas ? 1 : 0 },
           {
             yPercent: 0,
             opacity: 1,
@@ -134,6 +167,62 @@ export default function Motor() {
           },
         );
       });
+
+      // ---- Escalonado: los hijos directos entran uno detrás del otro ----
+      document.querySelectorAll<HTMLElement>("[data-escalonar]").forEach((el) => {
+        if (reducido || oculto(el)) {
+          el.classList.add("revelado");
+          return;
+        }
+        gsap.fromTo(
+          el.children,
+          { y: 36, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: duracion.media,
+            ease: ease.salida,
+            stagger: Number(el.dataset.escalonar || escalonado.items),
+            scrollTrigger: { trigger: el, start: "top 86%", once: true },
+            onStart: () => el.classList.add("revelado"),
+            clearProps: "transform",
+          },
+        );
+      });
+
+      // ---- Fotos: se descubren de abajo hacia arriba mientras la imagen se asienta ----
+      document.querySelectorAll<HTMLElement>("[data-foto]").forEach((el) => {
+        if (reducido || oculto(el)) {
+          el.classList.add("revelado");
+          return;
+        }
+        const interior = el.firstElementChild;
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+          delay: Number(el.dataset.retraso || 0),
+          onStart: () => el.classList.add("revelado"),
+        });
+        tl.fromTo(el, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "power4.inOut", clearProps: "clipPath" });
+        if (interior) tl.fromTo(interior, { scale: 1.25, filter: "blur(18px)" }, { scale: 1, filter: "blur(0px)", duration: 1.7, ease: ease.salida, clearProps: "filter" }, 0);
+      });
+
+      // ---- Lectura: el texto se va encendiendo palabra por palabra con el scroll ----
+      document.querySelectorAll<HTMLElement>("[data-leer]").forEach((el) => {
+        if (reducido || oculto(el)) return;
+        const split = SplitText.create(el, { type: "words" });
+        splits.push(split);
+        gsap.fromTo(
+          split.words,
+          { opacity: 0.16 },
+          { opacity: 1, ease: "none", stagger: 0.1, scrollTrigger: { trigger: el, start: "top 78%", end: "bottom 45%", scrub: 0.6 } },
+        );
+      });
+
+      // ---- Progreso de lectura (la línea del header) ----
+      const progreso = document.querySelector<HTMLElement>("[data-progreso]");
+      if (progreso && !reducido) {
+        gsap.fromTo(progreso, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
+      }
 
       // ---- Counters ----
       document.querySelectorAll<HTMLElement>("[data-contar]").forEach((bloque) => {
@@ -160,7 +249,7 @@ export default function Motor() {
 
       // ---- Encendido: el ítem se ilumina mientras cruza el centro de la pantalla ----
       document.querySelectorAll<HTMLElement>("[data-encender]").forEach((el) => {
-        if (reducido) {
+        if (reducido || oculto(el)) {
           el.classList.add("encendido");
           return;
         }

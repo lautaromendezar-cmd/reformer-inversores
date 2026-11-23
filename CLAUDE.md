@@ -1,65 +1,117 @@
-# Fosque Reformer Partners — sitio para inversores
+# Fosque Reformer · landing B2B de franquicias
 
-Hermano B2B del sitio B2C (`../fosque-reformer`, leer su `CLAUDE.md`). Next 16 App Router + TS +
-Tailwind v4 + GSAP (ScrollTrigger, SplitText, Flip) + Lenis + Zod + Resend. README para correr,
-variables y estructura; `ASSETS_TODO.md` para imágenes.
+Hermano B2B del sitio B2C (`../fosque-reformer`). Next 16 App Router + TS + Tailwind v4 + GSAP
+(ScrollTrigger, SplitText, Flip) + Lenis + Zod + Resend.
 
-**Fuente de verdad del contenido:** `docs/B2B_fosque_reformer_plataforma_inversores.pdf`
-(Documento Maestro B2B, viene duplicado: usar la primera copia). **Decisión de Lautaro
-(4-oct-2026): los datos del documento van tal cual; las afirmaciones son responsabilidad del
-cliente.** Igual quedan juntas en `content/afirmaciones.ts` para poder cambiarlas en un lugar.
+**Rama `landing-22-nov` (22-nov-2026): el sitio de 7 páginas se reemplazó por UNA landing.**
+Gerardo dijo que el sitio anterior "no transmite la esencia" y pidió "más luz, más simple, más
+clara, mostrar el producto". Mandó un boceto propio (Google Sites) y un Documento Maestro nuevo.
+`main` sigue teniendo el sitio viejo, que es lo que está en producción.
 
-**Regla de copy (Lautaro, 5-oct-2026): "usá los textos del PDF, no inventes".** Todo texto que
-afirma algo sale del documento (voseo y erratas corregidas). Lo que no es del PDF es sólo
-interfaz: botones, etiquetas, instrucciones de formulario. Si el PDF no dice algo (plazos,
-definiciones de los perfiles, el paso a paso del proceso), no se completa: se deja el título
-solo o se omite, con `// TODO: validar con Gerardo`.
+**Fuente de verdad del contenido:** el boceto de Gerardo y el "Documento Maestro B2B, versión
+definitiva 18-nov-2026", los dos en `material-22-nov/` (fuera de git). Todo el copy vive en
+`content/landing.ts`, **tal cual lo escribió él, tuteo incluido**. Lo que se contradice o lo que
+inventó la IA de su boceto NO se corrige: se anota en `DUDAS-PARA-GERARDO.md`.
 
-## Dirección de arte: "Portales de luz"
+**Sin créditos de IA:** las seis fotos (`lib/imagenes.ts`) son las que ya estaban hechas.
 
-- Suelo noche/corteza (más sobrio que el marrón del B2C). La luz es el acento: ámbar 2700K
-  (`--color-ambar`, `--color-luz`). El tricolor de la fachada queda sólo en la línea del preloader.
-- Baloo Bhaijaan 2 600 en titulares (igual que el B2C), Figtree en cuerpo y **cifras con
-  `tabular-nums`** (los counters no tiemblan).
-- El arco de color (`lib/luz.ts` + `Motor.tsx`, mismo mecanismo que el B2C). La temperatura es el
-  hilo: el manifiesto va de frío (6500K) a 2700K, con una foto por estrofa graduada igual (ciudad
-  con ruido, encuentro en la sala, fachada como portal). El sol del B2C se sacó el 14-oct: repetía la sala.
-- **Gente feliz en los ambientes** (pedido del cliente): renders del estudio + personas con IA.
+## Dirección de arte: la de Partners, en claro
+
+- Suelo lino, tinta noche, ámbar como acento. Dos bloques oscuros de contraste: salón y manifiesto.
+- Baloo Bhaijaan 2 600 en titulares, Figtree en cuerpo y cifras (`tabular-nums`). **No usar la
+  serif del boceto (Cormorant): la puso la plantilla de la IA, no él.**
+- Contexto claro/oscuro por variables (`globals.css`): `.oscuro` y `.claro` redefinen `--acento`,
+  `--regla`, `--suave`, `--pista`. Antetítulos, reglas, botones de línea, foco y deslizador las
+  heredan, así que se pueden anidar (tarjeta oscura en sección clara y al revés).
+- Sin tarjetas con borde por todos lados: reglas horizontales y números grandes.
+
+## El fondo vivo (components/Follaje.tsx)
+
+Sombras de palmas desenfocadas, inspiradas en el mural retroiluminado de la sala, en tonos tierra.
+Dibujadas por código (SVG, sin imágenes). Se mecen solas, se corren con el mouse según su
+profundidad y una luz tibia sigue al cursor. Reutilizable: `<Follaje composicion="hero|esquina|pie"
+tono="claro|oscuro" />` como primer hijo de una sección `relative isolate overflow-clip`
+(**clip, no hidden**: con hidden se rompe el `sticky` del formulario). Hoy está en el hero y en
+territorios. Es fondo: no subir opacidades ni bajar el desenfoque hasta que compita con el texto.
+
+- **Anchos (23-nov):** el hero y el header llegan a los costados (`.contenedor-ancho`); el resto
+  de las secciones va contenido en 88rem (`.contenedor`). La tipografía escala con vw.
+- **Método es un relato con scroll** (`components/landing/Metodo.tsx`): pista de 420svh con un
+  escenario `sticky` (no pin de GSAP); el paso se elige por el progreso y la transición es discreta.
+  Los tamaños del texto de la izquierda van en `vh` para que el paso más largo entre en 720 de alto.
+  En mobile los pasos van apilados.
+- **Bloques duplicados escritorio/mobile:** el Motor saltea lo que no se está dibujando
+  (`oculto()`); un ScrollTrigger `once` sobre algo con `display:none` revienta GSAP.
+- **Header:** marca sola a la izquierda, cápsula con los ítems numerados y el botón a la derecha.
+- **Hero en dos tiempos:** la primera pantalla es sólo el mensaje sobre el follaje (el titular de
+  Gerardo entero, en dos jerarquías; las palabras reaccionan al cursor y "15"/"25" cuentan). Al
+  scrollear, escenario `sticky` en una pista de 300svh: el mensaje se va y la foto, que arranca
+  oculta, se abre hasta pantalla completa; al final entra la Ecuación Financiera. Sin JS queda en
+  fila. La foto es vertical en mobile: por eso `sizes` pide 400vw (si no, se ve borrosa).
+
+## Scroll horizontal (components/landing/Sistema.tsx)
+
+Los 6 pilares cruzan la pantalla de derecha a izquierda por encima del título gigante, que se apaga
+y desenfoca. Cada tarjeta está en foco sólo cerca del centro (blur + escala según la distancia) y
+su foto se corre dentro del marco. Tarjetas a distintas alturas y tamaños (`nth-child` en
+globals.css). `sticky` + scrub; la altura de la pista se mide en `refreshInit`. Sólo desde 1024 px:
+en mobile es una grilla. El `padding-right` de la fila (36vw) es lo que deja llegar la última
+tarjeta al centro.
+
+- **Títulos (`data-revelar="palabras"`) y hero:** cada palabra sube flotando y se enfoca
+  (blur 14px → 0, `expo.out`, sin máscara). Las fotos (`data-foto`, Método) también entran enfocando.
+
+## El mural (components/Mural.tsx)
+
+La pieza "Propuesta Luxury" del manual de marca (silueta a contraluz sobre un paisaje), rehecha y
+animada por capas en vez de video: paisaje, luz que respira, dos bancos de niebla que derivan y la
+figura recortada con su sombra. El mouse corre cada capa según su profundidad. **Sólo en el
+Manifiesto**: es remate emocional, no argumento de venta; en el hero cambiaría el mensaje a "clase
+de pilates" (criterio acordado con Lautaro el 23-nov). La silueta está sobre un Reformer a
+propósito: así el mural también muestra el producto. Recorte: `assets/gen/out/mural-23-nov/`
+(blanco → transparente con modelo "oscuro sobre blanco", para que no quede halo claro).
+
+## Animación (components/Motor.tsx)
+
+Convenciones por atributo, leídas del DOM: `data-revelar` (y `="lineas"`, `="palabras"`),
+`data-escalonar`, `data-foto`, `data-leer`, `data-contar` + `data-n`, `data-encender`,
+`data-parallax`, `data-magnetico`, `data-progreso`. Sin JS todo se ve: los estados ocultos
+dependen de `html.motor-listo`.
+
+- **No poner `data-revelar` ni `data-escalonar` en algo que React vuelve a montar** (el formulario
+  al resetear): el nodo nuevo nace oculto y nadie lo revela. Envolver desde afuera.
+- El hero espera a `precargaLista`; la bajada sólo se desplaza (sin opacidad) por el LCP. Al terminar
+  la entrada se revierte el SplitText con máscaras y se vuelve a partir sin ellas (recortarían el
+  movimiento de las palabras con el cursor).
+- Simulador: los `<span data-num>` muestran siempre el valor inicial y GSAP escribe encima.
+- Niveles: sección oscura propia, cuatro paneles (`.nivel` en globals.css). El activo se abre con
+  `flex-grow` (CSS) y el contenido mide el ancho final (`--abierto`) para no reacomodarse al abrir.
+  Se abre con hover, foco o flechas; en mobile es acordeón. Fondo: `<Follaje tono="oscuro">`.
+- Territorios: Flip sobre las filas; el filtrado es imperativo (`display`), React sólo pinta el botón.
+- El simulador le pasa el rango de capital al formulario con el evento `fr:configuracion`.
 
 ## Cosas que no son obvias
 
 - **Las clases propias de `globals.css` van en `@layer components`.** Fuera de la capa le ganan a
-  las utilidades de Tailwind (`.boton` pisaba a `xl:hidden` y el botón Menú aparecía en escritorio).
-- **El manifiesto no usa pin de GSAP:** la sección mide 340vh con un escenario `sticky`. Así los
-  marcadores del arco (`.manifiesto-marca`) quedan en el flujo y el fondo cambia solo. Sin JS o
-  con reduced-motion no se agrega `.manifiesto-vivo` y las estrofas se leen apiladas.
-- **El menú mobile está fuera del `<header>`:** el `backdrop-filter` del header hace de contenedor
-  de los `fixed` y recortaba el panel a 72 px.
-- **`template.tsx`** hace la cortina entre páginas y limpia el `transform` al terminar (un
-  transform residual rompe cualquier `fixed`/`sticky` de adentro).
-- **Mapa de la hoja de ruta:** `npm run mapa` (scripts/generar-mapa.mjs) rasteriza Natural Earth
-  (world-atlas, dev) a `lib/mapa.generado.ts`. `MapaRuta` agrupa los 1.334 puntos en ~30 `<path>`
-  por país y banda de distancia a Buenos Aires: con un `<circle>` por punto el TBT de /modelo
-  subía a 240 ms.
-- **Calculadora:** los `<span data-num>` muestran siempre el valor inicial y GSAP escribe encima
-  (si React también los actualiza, se pisan el nodo de texto). El indicador de formato lo crea
-  y lo mueve GSAP con Flip, fuera de React.
-- **Proceso:** el modo horizontal (`.proceso-horizontal`) lo pone el JS sólo cuando fija la
-  sección; con clases `lg:` una tablet táctil quedaba con los pasos en fila y sin pin.
-- **El foco global va en `@layer base`** para que `focus:outline-none` pueda pisarlo.
+  las utilidades de Tailwind.
+- **El menú mobile está fuera del `<header>`:** su `backdrop-filter` recortaba el panel.
+- **La coma del titular va dentro del tramo destacado:** afuera, SplitText la manda sola al renglón
+  siguiente.
+- **Comparativa:** tabla real con scroll horizontal y primera columna `sticky`; el contenedor tiene
+  margen negativo para llegar al borde de la pantalla.
+- Las rutas del sitio viejo redirigen (307) a su bloque de la landing: `next.config.ts`.
 - El formulario sin `RESEND_API_KEY` responde 503 y ofrece WhatsApp con los datos ya escritos.
 
-## Fases (del brief)
+## Verificar
 
-1. Relevamiento ✔ · 2. Base ✔ · 3. Home ✔ · 4. Internas ✔ (Modelo con mapa, Co-Propiedad con
-simulador, Inversión con calculadora + Flip y cadena de importación, Proceso horizontal, Academia
-con volúmenes, FAQ) · 5. Conversión ✔ (test `/candidato` → `/aplicar` precargado, multi-step,
-gracias) · 6. Pulido (pendiente: dossier PDF, datos del cliente, Lighthouse en vivo).
+`npm run build && npx next start -p 4319`, y recorrer con capturas en 1440 y 390 bajando de a
+poco (los reveals se disparan con el scroll). Probar: pestañas de niveles, deslizador en 15/18/19/25,
+"Postular con esta configuración", filtro de territorios, formulario vacío y completo.
 
 ## Deploy
 
 `vercel deploy --scope lautaro-mendez-s-projects` (preview) desde esta carpeta. El remoto es
-`github.com/lautaromendezar-cmd/reformer-inversores`, rama `main`.
+`github.com/lautaromendezar-cmd/reformer-inversores`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

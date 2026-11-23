@@ -8,6 +8,22 @@ const nextConfig: NextConfig = {
     deviceSizes: [420, 640, 828, 1080, 1280, 1600, 1920, 2560, 3840],
     qualities: [85],
   },
+  // Las páginas del sitio anterior (7 páginas, hasta el 14-oct-2026) llevan a su bloque de la
+  // landing. Temporales (307): si el cliente vuelve a pedir páginas internas, no quedan cacheadas.
+  async redirects() {
+    const a = (source: string, destination: string) => ({ source, destination, permanent: false });
+    return [
+      a("/modelo", "/#metodo"),
+      a("/co-propiedad", "/#comparativa"),
+      a("/inversion", "/#formatos"),
+      a("/proceso", "/#sistema"),
+      a("/academia", "/#sistema"),
+      a("/faq", "/#sistema"),
+      a("/candidato", "/#postular"),
+      a("/aplicar", "/#postular"),
+      a("/portal", "/"),
+    ];
+  },
   async headers() {
     // Bajo NDA: mientras NEXT_PUBLIC_ALLOW_INDEXING no sea "true", cada respuesta lleva noindex
     // (además del meta robots y del robots.txt). Cubre PDFs, imágenes y lo que no tenga <head>.
